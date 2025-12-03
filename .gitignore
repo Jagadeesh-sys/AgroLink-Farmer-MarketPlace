@@ -1,0 +1,15 @@
+# Ignore Eclipse metadata and settings
+.metadata/
+.settings/
+.classpath
+.project
+Servers/
+
+# Backend build folders
+backend/bin/
+backend/target/
+
+# Frontend (React)
+frontend/node_modules/
+frontend/build/
+frontend/.env
