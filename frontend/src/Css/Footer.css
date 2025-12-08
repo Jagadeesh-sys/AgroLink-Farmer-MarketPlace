@@ -1,7 +1,8 @@
 .footer {
+  position: relative;    /* ← You asked for this */
   padding: 20px;
   background: #0f3d3e;
   color: white;
   text-align: center;
-  margin-top: 40px;
+  margin-top: auto;      /* 🔥 pushes footer to bottom */
 }

@@ -1,0 +1,62 @@
+package com.agrolink.servlets;
+
+import com.agrolink.dao.CropDAO;
+import javax.servlet.http.*;
+import java.io.File;
+import java.io.IOException;
+
+public class DeleteCropServlet extends BaseServlet {
+
+    // USE SAME PATH AS UPLOAD SERVLET
+    private static final String IMAGE_UPLOAD_PATH =
+            "D:/AgroLink/backend/WebContent/uploads/";
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        setCors(req, resp);
+
+        String cropId = req.getParameter("cropId");
+        String images = req.getParameter("images");
+
+        System.out.println("---- DEBUG DELETE ----");
+        System.out.println("cropId = " + cropId);
+        System.out.println("images = " + images);
+        System.out.println("PATH = " + IMAGE_UPLOAD_PATH);
+
+        if (cropId == null) {
+            sendJson(resp, "{\"status\":\"FAILED\",\"message\":\"cropId missing\"}");
+            return;
+        }
+
+        try {
+
+            // delete images
+            if (images != null && !images.isEmpty()) {
+                for (String file : images.split(",")) {
+                    if (file.trim().isEmpty()) continue;
+
+                    File imgFile = new File(IMAGE_UPLOAD_PATH + file.trim());
+
+                    System.out.println("Deleting: " + imgFile.getAbsolutePath());
+
+                    if (imgFile.exists()) {
+                        imgFile.delete();
+                        System.out.println("Deleted file");
+                    } else {
+                        System.out.println("File does NOT exist");
+                    }
+                }
+            }
+
+            // Delete from DB
+            new CropDAO().deleteCrop(cropId);
+
+            sendJson(resp, "{\"status\":\"SUCCESS\"}");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendJson(resp, "{\"status\":\"FAILED\"}");
+        }
+    }
+}

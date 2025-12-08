@@ -1,47 +1,52 @@
-/* NAVBAR MAIN */
+/* ======================================
+   FIXED NAVBAR — ALWAYS ON TOP
+====================================== */
 .nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 80px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 50px;
 
-  background: #ffffff;   /* White navbar */
+  padding: 0 50px;
+
+  background: #ffffff;
   color: #055052;
 
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
+  z-index: 5000;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
 }
 
-/* LEFT LOGO + BRAND */
+/* --------------------------------------
+   LEFT LOGO
+-------------------------------------- */
 .nav-left {
   display: flex;
   align-items: center;
 }
 
 .logo {
-  width: 170px;
-  margin-right: 10px;
+  width: 150px;
+  margin-top:25px;
+  margin-right: 20px;
+  cursor: pointer;
 }
 
-.brand {
-  font-size: 24px;
-  font-weight: bold;
-  color: #055052;
-}
-
-/* -------------------------------
-   CENTER MENU (NOW PERFECTLY CENTERED)
--------------------------------- */
+/* --------------------------------------
+   CENTER MENU
+-------------------------------------- */
 .nav-menu {
   list-style: none;
   display: flex;
   gap: 35px;
 
-  flex: 1;                     /* navbar center stretch */
-  justify-content: center;     /* center menu */
+  flex: 1;
+  justify-content: center;
   padding: 0;
   margin: 0;
 }
@@ -71,9 +76,9 @@
   width: 100%;
 }
 
-/* active HOME */
+/* active page styling */
 .nav-menu .active {
-  color: #000 !important;
+  color: #000;
   font-weight: 700;
 }
 
@@ -81,16 +86,16 @@
   width: 100%;
 }
 
-/* --------------------------------
-   RIGHT SIDE (PROFILE OR BUTTONS)
----------------------------------- */
+/* --------------------------------------
+   RIGHT SIDE BUTTONS (LOGIN / SIGNUP)
+-------------------------------------- */
 .nav-btns {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-/* SIGN UP BUTTON */
+/* Signup Button */
 .signup {
   background: #8fe18f;
   color: #000;
@@ -109,7 +114,7 @@
   transform: translateY(-2px);
 }
 
-/* LOGIN BUTTON */
+/* Login Button */
 .login {
   background: #055052;
   color: white;
@@ -126,7 +131,13 @@
   background: #03393a;
 }
 
-/* PROFILE (LOGGED IN) */
+/* --------------------------------------
+   PROFILE (LOGGED IN USER)
+-------------------------------------- */
+.profile-dropdown-container {
+  position: relative;
+}
+
 .profile-mini {
   display: flex;
   align-items: center;
@@ -135,20 +146,102 @@
 }
 
 .profile-circle {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   background: #8fe18f;
   color: black;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+
   font-weight: 700;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .profile-text {
   font-size: 17px;
   font-weight: 600;
   color: #055052;
+}
+
+/* --------------------------------------
+   DROPDOWN MENU
+-------------------------------------- */
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 65px;
+
+  background: #fff;
+  width: 220px;
+
+  border-radius: 12px;
+  padding: 12px 0;
+
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+
+  animation: dropdownFade 0.25s ease-out;
+  z-index: 9999;
+}
+
+.profile-dropdown p {
+  padding: 12px 18px;
+  margin: 0;
+  font-size: 15px;
+  cursor: pointer;
+  color: #055052;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+}
+
+.profile-dropdown p:hover {
+  background: #f2fdf2;
+}
+
+/* icons inside dropdown */
+.profile-dropdown p i {
+  margin-right: 12px;
+  width: 18px;
+  text-align: center;
+  color: #055052;
+}
+
+/* logout special styling */
+.profile-dropdown .logout {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.profile-dropdown .logout i {
+  color: #c0392b;
+}
+
+.profile-dropdown .logout:hover {
+  background: #ffeaea;
+}
+
+/* Animation */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------
+   PAGE SPACING FIX (VERY IMPORTANT)
+-------------------------------------- */
+
+/* Prevent content from hiding behind fixed navbar */
+body,
+.dashboard-container,
+.dashboard-main {
+  padding-top: 80px !important;
 }

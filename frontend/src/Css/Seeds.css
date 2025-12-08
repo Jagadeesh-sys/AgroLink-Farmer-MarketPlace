@@ -1,0 +1,64 @@
+.seeds-container {
+  padding: 20px;
+  background: white;
+  min-height: 60vh;
+}
+
+.seeds-title {
+  text-align: center;
+  font-size: 28px;
+  color: #055052;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.seeds-title i {
+  color: #2e7d32;
+}
+
+.seeds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+}
+
+.seeds-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+  transition: 0.3s;
+}
+.seeds-card:hover {
+  transform: translateY(-6px);
+}
+
+.seeds-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.seeds-name {
+  font-size: 20px;
+  margin-top: 10px;
+  color: #044444;
+}
+.seeds-price {
+  font-size: 18px;
+  color: #2e7d32;
+  margin-bottom: 14px;
+}
+
+.seeds-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}

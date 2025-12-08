@@ -52,7 +52,11 @@ public class GetProfileServlet extends BaseServlet {
                     + "\"profilePhoto\":\"" + safe(u.getProfilePhoto()) + "\","
                     + "\"document1\":\"" + safe(u.getDocument1()) + "\","
                     + "\"document2\":\"" + safe(u.getDocument2()) + "\","
-                    + "\"verified\":" + u.getVerified()
+                    + "\"verified\":" + u.getVerified() + ","
+                    
+                    // ⭐ ADD THIS LINE – Final Fix!
+                    + "\"farmerId\":\"" + safe(u.getFarmerId()) + "\""
+
                     + "}"
                 + "}";
 

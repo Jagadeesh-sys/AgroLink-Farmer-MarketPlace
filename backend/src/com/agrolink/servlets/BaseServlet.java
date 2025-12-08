@@ -8,17 +8,27 @@ import java.io.IOException;
 public class BaseServlet extends HttpServlet {
 
     protected void setCors(HttpServletRequest request, HttpServletResponse response) {
+
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+        // ⭐ MUST ALLOW MULTIPART FOR IMAGE UPLOAD
+        response.setHeader("Access-Control-Allow-Headers",
+                "Content-Type, Authorization, X-Requested-With, enctype, Accept");
+
+        // ⭐ Must allow OPTIONS preflight, file uploads
+        response.setHeader("Access-Control-Allow-Methods",
+                "GET, POST, PUT, DELETE, OPTIONS");
+
+        // ⭐ allow large uploads
+        response.setHeader("Access-Control-Max-Age", "3600");
     }
 
     @Override
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        setCors(request, response);
-        response.setStatus(HttpServletResponse.SC_OK);
+        setCors(req, resp);
+        resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     protected void sendJson(HttpServletResponse resp, String json) throws IOException {

@@ -20,6 +20,25 @@ public class UserDAO {
         }
     }
 
+    // ⭐ UNIQUE FARMER ID: AGRO-<last4digits>-<random4digits>
+    public String generateFarmerId(String mobile) {
+        String last4 = mobile.substring(mobile.length() - 4);
+        int random = (int)(1000 + Math.random() * 9000); // 4-digit random number
+        return "AGRO-" + last4 + "-" + random;
+    }
+
+    // Save farmer ID into DB
+    public void saveFarmerId(String mobile, String farmerId) throws Exception {
+        String sql = "UPDATE users SET farmer_id=? WHERE mobile=?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, farmerId);
+            ps.setString(2, mobile);
+            ps.executeUpdate();
+        }
+    }
+
     // Basic user registration
     public void register(User user) throws Exception {
         String sql = "INSERT INTO users (full_name, mobile, password) VALUES (?, ?, ?)";
@@ -56,7 +75,7 @@ public class UserDAO {
         return login(mobile, password);
     }
 
-    // Get complete user profile
+    // ⭐ Get full profile and auto-generate farmerId if missing
     public User getProfileByMobile(String mobile) throws Exception {
         String sql = "SELECT * FROM users WHERE mobile = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -66,7 +85,17 @@ public class UserDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapUser(rs);
+
+                    User user = mapUser(rs);
+
+                    // ⭐ AUTO CREATE FARMER ID
+                    if (user.getFarmerId() == null || user.getFarmerId().trim().isEmpty()) {
+                        String newId = generateFarmerId(mobile);
+                        user.setFarmerId(newId);
+                        saveFarmerId(mobile, newId);
+                    }
+
+                    return user;
                 }
             }
         }
@@ -133,6 +162,9 @@ public class UserDAO {
         u.setDocument1(rs.getString("document1"));
         u.setDocument2(rs.getString("document2"));
         u.setVerified(rs.getInt("verified"));
+
+        // ⭐ Load farmer ID
+        u.setFarmerId(rs.getString("farmer_id"));
 
         return u;
     }

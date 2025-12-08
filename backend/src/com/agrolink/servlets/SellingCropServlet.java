@@ -1,0 +1,93 @@
+package com.agrolink.servlets;
+
+import com.agrolink.dao.CropDAO;
+import com.agrolink.model.Crop;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+
+@MultipartConfig
+public class SellingCropServlet extends BaseServlet {
+
+    // ⭐ SAVE IMAGES TO REAL WEBAPP FOLDER (NOT TMP DIRECTORY)
+    private static final String IMAGE_UPLOAD_PATH =
+            "D:/AgroLink/backend/WebContent/uploads/";
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+
+        setCors(request, response);
+        response.setContentType("application/json");
+
+        // Ensure uploads folder exists
+        File uploadDir = new File(IMAGE_UPLOAD_PATH);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+            System.out.println("Created folder: " + uploadDir.getAbsolutePath());
+        }
+
+        String farmerId = request.getParameter("farmerId");
+        String cropName = request.getParameter("cropName");
+        String category = request.getParameter("category");
+        String quantity = request.getParameter("quantity");
+        String price = request.getParameter("price");
+        String deliveryTime = request.getParameter("deliveryTime");
+        String grade = request.getParameter("grade");
+        String description = request.getParameter("description");
+
+        StringBuilder imagesList = new StringBuilder();
+
+        try {
+            Collection<Part> parts = request.getParts();
+
+            for (Part part : parts) {
+                if (!"images".equals(part.getName())) continue;
+
+                String original = part.getSubmittedFileName();
+                if (original == null || original.isEmpty()) continue;
+
+                // Generate safe filename
+                String fileName = System.currentTimeMillis() + "_" +
+                        original.replaceAll("[^a-zA-Z0-9._-]", "_");
+
+                String fullPath = IMAGE_UPLOAD_PATH + fileName;
+
+                System.out.println("Saving to: " + fullPath);
+
+                // Save file to uploads folder
+                part.write(fullPath);
+
+                imagesList.append(fileName).append(",");
+            }
+
+            Crop crop = new Crop();
+            CropDAO dao = new CropDAO();
+
+            String cropId = dao.generateCropId(farmerId);
+
+            crop.setCropId(cropId);
+            crop.setFarmerId(farmerId);
+            crop.setCropName(cropName);
+            crop.setCategory(category);
+            crop.setQuantity(quantity);
+            crop.setPrice(price);
+            crop.setDeliveryTime(deliveryTime);
+            crop.setGrade(grade);
+            crop.setDescription(description);
+            crop.setImages(imagesList.toString());   // Store filenames
+
+            dao.saveCrop(crop);
+
+            sendJson(response, "{\"status\":\"SUCCESS\"}");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendJson(response, "{\"status\":\"FAILED\"}");
+        }
+    }
+}

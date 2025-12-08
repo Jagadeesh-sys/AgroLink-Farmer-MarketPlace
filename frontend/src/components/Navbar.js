@@ -1,35 +1,49 @@
-// src/components/Navbar.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../Css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [userName, setUserName] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
+  const dropdownRef = useRef(null);
+
+  // Load user from localStorage
   useEffect(() => {
-    const name = localStorage.getItem("userName");
-    if (name) setUserName(name);
+    const user = JSON.parse(localStorage.getItem("userData"));
+    if (user) {
+      setUserName(user.fullName);
+    }
   }, []);
 
-  const goToProfile = () => {
-    navigate("/profile");
-  };
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const goHome = () => {
-    navigate("/home");
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    navigate("/login");
   };
 
   return (
     <nav className="nav">
-      <div className="nav-left">
+      {/* LEFT SIDE - LOGO */}
+      <div className="nav-left" onClick={() => navigate("/home")} style={{ cursor: "pointer" }}>
         <img src="/Images/Logo1.png" alt="AgroLink Logo" className="logo" />
       </div>
 
-      {/* NAV MENU */}
+      {/* CENTER MENU */}
       <ul className="nav-menu">
-        <li onClick={goHome} className="home-item">Home</li>
-        <li>Marketplace</li>
+        <li onClick={() => navigate("/home")}>Home</li>
+        <li onClick={() => navigate("/marketplace")}>Marketplace</li>
         <li>Inputs</li>
         <li>Loans</li>
         <li>Insurance</li>
@@ -37,10 +51,36 @@ function Navbar() {
         <li>Contact</li>
       </ul>
 
+      {/* RIGHT SIDE – USER PROFILE OR LOGIN BUTTONS */}
       {userName ? (
-        <div className="profile-mini" onClick={goToProfile}>
-          <div className="profile-circle">{userName.charAt(0)}</div>
-          <span className="profile-text">{userName}</span>
+        <div className="profile-dropdown-container" ref={dropdownRef}>
+          <div
+            className="profile-mini"
+            onClick={() => setShowMenu((prev) => !prev)}
+          >
+            <div className="profile-circle">{userName.charAt(0)}</div>
+            <span className="profile-text">{userName}</span>
+          </div>
+
+          {showMenu && (
+            <div className="profile-dropdown">
+              <p onClick={() => { navigate("/profile"); setShowMenu(false); }}>
+                <i className="fa-solid fa-user"></i> My Profile
+              </p>
+
+              <p onClick={() => { navigate("/dashboard"); setShowMenu(false); }}>
+                <i className="fa-solid fa-gauge-high"></i> Dashboard
+              </p>
+
+              <p onClick={() => { navigate("/settings"); setShowMenu(false); }}>
+                <i className="fa-solid fa-gear"></i> Settings
+              </p>
+
+              <p className="logout" onClick={handleLogout}>
+                <i className="fa-solid fa-right-from-bracket"></i> Logout
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <div className="nav-btns">

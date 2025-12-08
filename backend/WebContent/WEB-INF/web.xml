@@ -45,4 +45,46 @@
         <url-pattern>/api/user/update-profile</url-pattern>
     </servlet-mapping>
 
+    <!-- SELLING CROP -->
+    <servlet>
+        <servlet-name>SellingCropServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.SellingCropServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SellingCropServlet</servlet-name>
+        <url-pattern>/api/crop/sellingcrop</url-pattern>
+    </servlet-mapping>
+
+    <!-- GET CROPS FOR DASHBOARD -->
+    <servlet>
+        <servlet-name>GetFarmerCropsServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.GetFarmerCropsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetFarmerCropsServlet</servlet-name>
+        <url-pattern>/api/crop/farmer</url-pattern>
+    </servlet-mapping>
+    <!-- DELETE CROP -->
+	<servlet>
+	    <servlet-name>DeleteCropServlet</servlet-name>
+	    <servlet-class>com.agrolink.servlets.DeleteCropServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>DeleteCropServlet</servlet-name>
+	    <url-pattern>/api/crop/delete</url-pattern>
+	</servlet-mapping>
+	<!-- GET ALL CROPS -->
+	<servlet>
+	    <servlet-name>GetAllCropsServlet</servlet-name>
+	    <servlet-class>com.agrolink.servlets.GetAllCropsServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>GetAllCropsServlet</servlet-name>
+	    <url-pattern>/api/crop/all</url-pattern>
+	</servlet-mapping>
+
+	
+    
+
 </web-app>

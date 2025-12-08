@@ -33,6 +33,9 @@ public class User {
 
     // Verification status
     private int verified;
+    
+    private String farmerId;
+
 
     // Getters & Setters
     public long getId() { return id; }
@@ -97,4 +100,8 @@ public class User {
 
     public int getVerified() { return verified; }
     public void setVerified(int verified) { this.verified = verified; }
+
+    public String getFarmerId() { return farmerId; }
+    public void setFarmerId(String farmerId) { this.farmerId = farmerId; }
+
 }

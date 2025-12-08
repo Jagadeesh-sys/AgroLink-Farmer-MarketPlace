@@ -11,17 +11,18 @@ function Login() {
     const data = await loginUser(mobile, password);
 
     if (data.status === "success") {
+      const user = data.user;
 
-      // ⭐ Save both full name and mobile number
-      localStorage.setItem("userName", data.fullName);
-      localStorage.setItem("userMobile", mobile);
+      // ⭐ SAVE FULL USER DATA INCLUDING FARMER ID
+      localStorage.setItem("userData", JSON.stringify(user));
+      localStorage.setItem("userName", user.fullName);
+      localStorage.setItem("userMobile", user.mobile);
 
       setShowPopup(true);
 
-      // Redirect after 2 seconds
       setTimeout(() => {
         window.location.href = "/home";
-      }, 2000);
+      }, 1500);
 
     } else {
       alert(data.message);
@@ -36,24 +37,19 @@ function Login() {
   return (
     <div className="auth-container">
 
-      {/* SUCCESS POPUP */}
       {showPopup && (
         <div className="popup-overlay">
           <div className="popup-card">
             <div className="popup-icon">✓</div>
-
-            <h2>Congrats!</h2>
-            <p>You have successfully logged in!</p>
-
-            <button className="popup-btn" onClick={handleOk}>
-              OK
-            </button>
+            <h2>Login Successful</h2>
+            <p>Welcome Back!</p>
+            <button className="popup-btn" onClick={handleOk}>OK</button>
           </div>
         </div>
       )}
 
       <div className="auth-box">
-        <h2>Welcome Back!</h2>
+        <h2>Login</h2>
 
         <input
           type="tel"

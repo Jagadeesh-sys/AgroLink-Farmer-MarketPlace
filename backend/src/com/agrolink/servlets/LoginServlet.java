@@ -4,9 +4,7 @@ import com.agrolink.dao.UserDAO;
 import com.agrolink.model.User;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.*;
 import java.io.IOException;
 
 public class LoginServlet extends BaseServlet {
@@ -22,29 +20,43 @@ public class LoginServlet extends BaseServlet {
 
         try {
             UserDAO dao = new UserDAO();
-
-            // ⭐ Use updated method
             User user = dao.getUserByMobileAndPassword(mobile, password);
 
             if (user != null) {
 
-                // ⭐ Send fullName in JSON
-                sendJson(response,
+                // 🔥 Ensure farmerId is not null
+                String farmerId = (user.getFarmerId() == null || user.getFarmerId().isEmpty())
+                        ? ""
+                        : user.getFarmerId();
+
+                // 🔥 Build safe JSON manually
+                String json =
                     "{"
                         + "\"status\":\"success\","
                         + "\"message\":\"Login successful\","
-                        + "\"fullName\":\"" + user.getFullName() + "\""
-                    + "}"
-                );
+                        + "\"user\":{"
+                            + "\"fullName\":\"" + safe(user.getFullName()) + "\","
+                            + "\"mobile\":\"" + safe(user.getMobile()) + "\","
+                            + "\"farmerId\":\"" + safe(farmerId) + "\""
+                        + "}"
+                    + "}";
+
+                sendJson(response, json);
 
             } else {
                 sendJson(response,
-                    "{\"status\":\"error\",\"message\":\"Invalid mobile or password\"}");
+                        "{\"status\":\"error\",\"message\":\"Invalid mobile or password\"}");
             }
 
         } catch (Exception e) {
             sendJson(response,
-                "{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
+                    "{\"status\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
         }
+    }
+
+    // Prevent JSON breaking when name contains quotes
+    private String safe(String s) {
+        if (s == null) return "";
+        return s.replace("\"", "\\\"");
     }
 }
