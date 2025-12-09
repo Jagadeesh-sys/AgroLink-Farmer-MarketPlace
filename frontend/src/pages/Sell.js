@@ -20,6 +20,26 @@ function Sell() {
     }
   }, []);
 
+  // ⭐ ENABLE PASTE IMAGE SUPPORT
+  useEffect(() => {
+    const handlePaste = (e) => {
+      const items = e.clipboardData.items;
+
+      for (let item of items) {
+        if (item.type.startsWith("image/")) {
+          const file = item.getAsFile();
+          const preview = URL.createObjectURL(file);
+
+          setCropImages((prev) => [...prev, { file, preview }]);
+        }
+      }
+    };
+
+    window.addEventListener("paste", handlePaste);
+
+    return () => window.removeEventListener("paste", handlePaste);
+  }, []);
+
   const [form, setForm] = useState({
     cropName: "",
     category: "Grains",
@@ -137,18 +157,27 @@ function Sell() {
             <div className="sell-placeholder">
               <i className="fa fa-image"></i>
               <p>Upload Crop Images</p>
+              <p className="paste-hint">Or paste images (Ctrl + V)</p>
             </div>
 
             <label className="upload-btn">
               <i className="fa fa-upload"></i> Upload Images
-              <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
+              />
             </label>
 
             <div className="preview-section">
               {cropImages.map((img, index) => (
                 <div className="preview-item" key={index}>
                   <img src={img.preview} className="preview-img" alt="preview" />
-                  <button className="preview-remove" onClick={() => removeImage(index)}>
+                  <button
+                    className="preview-remove"
+                    onClick={() => removeImage(index)}
+                  >
                     ✖
                   </button>
                 </div>
@@ -158,11 +187,25 @@ function Sell() {
 
           {/* FORM SECTION */}
           <div className="sell-form">
-            <label className="sell-label"><i className="fa fa-leaf"></i> Crop Name</label>
-            <input name="cropName" value={form.cropName} onChange={updateField} className="sell-input" />
+            <label className="sell-label">
+              <i className="fa fa-leaf"></i> Crop Name
+            </label>
+            <input
+              name="cropName"
+              value={form.cropName}
+              onChange={updateField}
+              className="sell-input"
+            />
 
-            <label className="sell-label"><i className="fa fa-list"></i> Category</label>
-            <select name="category" value={form.category} onChange={updateField} className="sell-input">
+            <label className="sell-label">
+              <i className="fa fa-list"></i> Category
+            </label>
+            <select
+              name="category"
+              value={form.category}
+              onChange={updateField}
+              className="sell-input"
+            >
               <option>Grains</option>
               <option>Vegetables</option>
               <option>Fruits</option>
@@ -172,31 +215,63 @@ function Sell() {
 
             <div className="sell-row">
               <div>
-                <label className="sell-label"><i className="fa fa-weight-hanging"></i> Qty (Kg)</label>
-                <input name="quantity" type="number" value={form.quantity} onChange={updateField} className="sell-input" />
+                <label className="sell-label">
+                  <i className="fa fa-weight-hanging"></i> Qty (Kg)
+                </label>
+                <input
+                  name="quantity"
+                  type="number"
+                  value={form.quantity}
+                  onChange={updateField}
+                  className="sell-input"
+                />
               </div>
 
               <div>
-                <label className="sell-label"><i className="fa fa-rupee-sign"></i> Price/Kg</label>
-                <input name="price" type="number" value={form.price} onChange={updateField} className="sell-input" />
+                <label className="sell-label">
+                  <i className="fa fa-rupee-sign"></i> Price/Kg
+                </label>
+                <input
+                  name="price"
+                  type="number"
+                  value={form.price}
+                  onChange={updateField}
+                  className="sell-input"
+                />
               </div>
             </div>
 
-            <label className="sell-label"><i className="fa fa-clock"></i> Delivery Time</label>
-            <select name="deliveryTime" value={form.deliveryTime} onChange={updateField} className="sell-input">
+            <label className="sell-label">
+              <i className="fa fa-clock"></i> Delivery Time
+            </label>
+            <select
+              name="deliveryTime"
+              value={form.deliveryTime}
+              onChange={updateField}
+              className="sell-input"
+            >
               <option>1 Day</option>
               <option>2–3 Days</option>
               <option>Within a Week</option>
             </select>
 
-            <label className="sell-label"><i className="fa fa-star"></i> Grade</label>
-            <select name="grade" value={form.grade} onChange={updateField} className="sell-input">
+            <label className="sell-label">
+              <i className="fa fa-star"></i> Grade
+            </label>
+            <select
+              name="grade"
+              value={form.grade}
+              onChange={updateField}
+              className="sell-input"
+            >
               <option value="A">A (Premium)</option>
               <option value="B">B (Good)</option>
               <option value="C">C (Average)</option>
             </select>
 
-            <label className="sell-label"><i className="fa fa-align-left"></i> Description</label>
+            <label className="sell-label">
+              <i className="fa fa-align-left"></i> Description
+            </label>
             <textarea
               name="description"
               value={form.description}

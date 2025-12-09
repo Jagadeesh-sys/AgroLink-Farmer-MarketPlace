@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "../Css/Dashboard.css";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
@@ -85,20 +86,20 @@ function Dashboard() {
 
         {/* RIGHT CONTENT */}
         <div className="content-area">
-          <main className="page-content">
-            {/* HEADER */}
+          <main className="page-content" role="main" aria-labelledby="dashboard-title">
+            {/* HEADER: Page title and quick user peek */}
             <header className="top-header">
               <div>
-                <h2>Welcome, {user?.fullName} 👋</h2>
+                <h2 id="dashboard-title">Welcome, {user?.fullName} 👋</h2>
                 <p>Your farming insights and performance summary</p>
               </div>
-              <div className="profile-box">
+              <div className="profile-box" aria-hidden="true">
                 <i className="fa-solid fa-user"></i>
               </div>
             </header>
 
-            {/* STATS */}
-            <section className="stats-container">
+            {/* STATS: Key performance indicators */}
+            <section className="stats-container" aria-label="Key performance indicators">
               <div className="stat-card">
                 <i className="fa-solid fa-wheat-awn"></i>
                 <h3>{crops.length}</h3>
@@ -118,8 +119,8 @@ function Dashboard() {
               </div>
             </section>
 
-            {/* GRAPH */}
-            <section className="graph-section">
+            {/* GRAPH: Simple bar visualization of quantities */}
+            <section className="graph-section" aria-label="Market activity overview">
               <h3>Market Activity Overview</h3>
 
               <div className="graph-container">
@@ -168,11 +169,11 @@ function Dashboard() {
               </div>
             </section>
 
-            {/* CROP TABLE */}
-            <section className="crop-table-section">
+            {/* CROP TABLE: Manage your crops with quick actions */}
+            <section className="crop-table-section" aria-label="Your crop listings">
               <h3>Your Crop Listings</h3>
 
-              <table className="crop-table">
+              <table className="crop-table" role="table" aria-label="Your Crop Listings">
                 <thead>
                   <tr>
                     <th>Image</th>
@@ -188,7 +189,15 @@ function Dashboard() {
                 <tbody>
                   {crops.length === 0 ? (
                     <tr>
-                      <td colSpan="7" className="no-data">No crops posted yet.</td>
+                      <td colSpan="7" className="no-data">
+                        {/* EMPTY STATE: Encourage first action */}
+                        No crops posted yet.
+                        <br />
+                        <small>Start by adding your first crop listing in Marketplace.</small>
+                        <div style={{ marginTop: "10px" }}>
+                          <Link className="empty-state-link" to="/marketplace/sell">Go to Sell</Link>
+                        </div>
+                      </td>
                     </tr>
                   ) : (
                     crops.map((c) => (

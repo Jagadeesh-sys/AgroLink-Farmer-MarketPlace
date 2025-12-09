@@ -256,3 +256,9 @@
     width: 100%;
   }
 }
+.paste-hint {
+  font-size: 13px;
+  color: #777;
+  margin-top: 5px;
+  text-align: center;
+}

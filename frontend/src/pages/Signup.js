@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../Css/Auth.css";
+import Navbar from "../components/Navbar";   // ⭐ add navbar
+import Footer from "../components/Footer";   // ⭐ add footer
 
 function Signup() {
   const [fullName, setFullName] = useState("");
@@ -28,7 +30,7 @@ function Signup() {
       const data = await res.json();
 
       if (data.status === "success") {
-        setShowPopup(true); // Show popup
+        setShowPopup(true);
       } else {
         alert(data.message);
       }
@@ -44,50 +46,72 @@ function Signup() {
   };
 
   return (
-    <div className="auth-container">
+    <>
+      {/* ⭐ NAVBAR */}
+      <Navbar />
 
-      {/* SUCCESS POPUP */}
-      {showPopup && (
-        <div className="popup-overlay">
-          <div className="popup-card">
-            <div className="popup-icon">
-              ✓
+      <div className="auth-container">
+
+        {/* SUCCESS POPUP */}
+        {showPopup && (
+          <div className="popup-overlay">
+            <div className="popup-card">
+              <div className="popup-icon">✓</div>
+              <h2>Congrats!</h2>
+              <p>Your account is created!</p>
+
+              <button className="popup-btn" onClick={handleOk}>
+                OK
+              </button>
             </div>
-
-            <h2>Congrats!</h2>
-            <p>Your account is created!</p>
-
-            <button className="popup-btn" onClick={handleOk}>
-              OK
-            </button>
           </div>
+        )}
+
+        <div className="auth-box">
+          <h2>Create Your Account</h2>
+
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+
+          <input
+            type="tel"
+            placeholder="Mobile Number"
+            value={mobile}
+            maxLength="10"
+            onChange={(e) => setMobile(e.target.value)}
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+          />
+
+          <button className="auth-btn" onClick={handleSignup}>
+            Sign Up
+          </button>
+
+          <p className="auth-switch">
+            Already have an account? <a href="/login">Log In</a>
+          </p>
         </div>
-      )}
-
-      <div className="auth-box">
-        <h2>Create Your Account</h2>
-
-        <input type="text" placeholder="Full Name"
-          value={fullName} onChange={(e) => setFullName(e.target.value)} />
-
-        <input type="tel" placeholder="Mobile Number"
-          value={mobile} maxLength="10" onChange={(e) => setMobile(e.target.value)} />
-
-        <input type="password" placeholder="Password"
-          value={password} onChange={(e) => setPassword(e.target.value)} />
-
-        <input type="password" placeholder="Confirm Password"
-          value={confirm} onChange={(e) => setConfirm(e.target.value)} />
-
-        <button className="auth-btn" onClick={handleSignup}>
-          Sign Up
-        </button>
-
-        <p className="auth-switch">
-          Already have an account? <a href="/login">Log In</a>
-        </p>
       </div>
-    </div>
+
+      {/* ⭐ FOOTER */}
+      <Footer />
+    </>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../Css/Cart.css";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
@@ -7,70 +8,122 @@ import Footer from "../components/Footer";
 function Cart() {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState(null);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountPct, setDiscountPct] = useState(0);
+  const navigate = useNavigate();
 
-  // Load cart when page loads or regains focus
   useEffect(() => {
     const refreshCart = () => {
       const saved = JSON.parse(localStorage.getItem("cart")) || [];
       setCart(saved);
     };
-
     refreshCart();
     window.addEventListener("focus", refreshCart);
-
     return () => window.removeEventListener("focus", refreshCart);
   }, []);
 
-  // Load logged-in user's data
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("userData"));
     if (savedUser) setUser(savedUser);
   }, []);
 
-  // Save cart to localStorage
   const updateCart = (newCart) => {
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
-  // Update quantity with limits
+  const clearCart = () => updateCart([]);
+
   const updateKg = (cropId, enteredQty, availableQty) => {
     let qty = Number(enteredQty);
-
     if (qty < 1) qty = 1;
     if (qty > availableQty) qty = availableQty;
-
     const updated = cart.map((item) =>
       item.cropId === cropId ? { ...item, qty } : item
     );
-
     updateCart(updated);
   };
 
-  // Remove item from cart
-  const removeItem = (id) => {
-    const updated = cart.filter((c) => c.cropId !== id);
-    updateCart(updated);
+  const removeItem = (id) =>
+    updateCart(cart.filter((c) => c.cropId !== id));
+
+  const fmt = (n) => new Intl.NumberFormat("en-IN").format(n);
+
+  // GST RATE PER CATEGORY
+  const getItemGST = (item) => {
+    if (item.farmerId) return 0; // Crops
+    if (item.cropId.startsWith("SEED")) return 0; // Seeds
+    if (item.cropId.startsWith("FERT")) return 0.05; // Fertilizers
+    if (item.cropId.startsWith("PEST")) return 0.18; // Pesticides
+    return 0;
   };
 
-  // Totals
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const tax = Math.round(subtotal * 0.06);
-  const total = subtotal + tax;
+  // CATEGORY TOTALS
+  const categoryTotal = { crops: 0, seeds: 0, fert: 0, pest: 0 };
+  const gstTotal = { crops: 0, seeds: 0, fert: 0, pest: 0 };
+
+  cart.forEach((item) => {
+    const amount = item.price * item.qty;
+    const gstRate = getItemGST(item);
+
+    if (item.farmerId) {
+      categoryTotal.crops += amount;
+      gstTotal.crops += amount * gstRate;
+    } else if (item.cropId.startsWith("SEED")) {
+      categoryTotal.seeds += amount;
+      gstTotal.seeds += amount * gstRate;
+    } else if (item.cropId.startsWith("FERT")) {
+      categoryTotal.fert += amount;
+      gstTotal.fert += amount * gstRate;
+    } else if (item.cropId.startsWith("PEST")) {
+      categoryTotal.pest += amount;
+      gstTotal.pest += amount * gstRate;
+    }
+  });
+
+  // SUBTOTAL
+  const subtotal =
+    categoryTotal.crops +
+    categoryTotal.seeds +
+    categoryTotal.fert +
+    categoryTotal.pest;
+
+  // DISCOUNT
+  const discountAmount = Math.round(subtotal * discountPct);
+  const taxable = subtotal - discountAmount;
+
+  // FINAL GST (ALL CATEGORIES)
+  const finalGST =
+    Math.round(gstTotal.crops) +
+    Math.round(gstTotal.seeds) +
+    Math.round(gstTotal.fert) +
+    Math.round(gstTotal.pest);
+
+  // EXTRA CHARGES
+  const platformFee = 10;
+  const deliveryCharge = 40;
+
+  // GRAND TOTAL
+  const grandTotal = taxable + finalGST + platformFee + deliveryCharge;
+
+  const applyDiscount = () => {
+    const code = discountCode.trim().toUpperCase();
+    if (code === "SAVE10") setDiscountPct(0.1);
+    else setDiscountPct(0);
+  };
 
   const getImage = (imgStr) => {
     if (!imgStr) return "/Images/noimg.png";
+    if (imgStr.startsWith("http") || imgStr.startsWith("data:")) return imgStr;
     const first = imgStr.split(",")[0].trim();
     return `http://localhost:9090/backend/uploads/${first}`;
   };
 
   return (
     <div className="dashboard-wrapper">
-      {/* Sidebar */}
       <Sidebar cartCount={cart.length} />
 
-      {/* Right side */}
       <div className="dashboard-content">
         <Navbar />
 
@@ -81,53 +134,64 @@ function Cart() {
           </div>
 
           <div className="cart-layout">
-            {/* LEFT — ITEMS */}
+            {/* LEFT SIDE */}
             <div className="cart-items">
               <h2 className="cart-title">Your Cart</h2>
 
               {cart.length === 0 ? (
-                <p className="empty-cart">Your cart is empty.</p>
+                <p className="empty-cart">
+                  Your cart is empty.{" "}
+                  <Link to="/marketplace" className="empty-cart-cta">
+                    Explore Marketplace
+                  </Link>
+                </p>
               ) : (
                 <div className="cart-list">
                   {cart.map((item) => {
-                    // ✅ Prefer availableStock, fallback to quantity, fallback to 0
-                    const available = Number(
-                      item.availableStock ?? item.availableQty ?? item.quantity
-                    ) || 0;
+                    const isCrop = !!item.farmerId;
+
+                    const available =
+                      Number(
+                        item.availableStock ??
+                          item.availableQty ??
+                          item.quantity
+                      ) || 0;
 
                     return (
                       <div className="cart-card-pro" key={item.cropId}>
-                        {/* IMAGE */}
                         <img
                           src={getImage(item.images)}
                           alt={item.cropName}
                           className="cart-img-pro"
                         />
 
-                        {/* DETAILS */}
                         <div className="cart-details-pro">
                           <h3>{item.cropName}</h3>
 
-                          <p><b>Farmer ID:</b> {item.farmerId}</p>
-                          <p><b>Price:</b> ₹{item.price} / kg</p>
+                          {isCrop && (
+                            <p>
+                              <b>Farmer ID:</b> {item.farmerId}
+                            </p>
+                          )}
 
-                          <p className="available-stock">
-                            Available Stock: <b>{available} Kg</b>
+                          <p>
+                            <b>Price:</b> ₹{item.price}
+                            {isCrop && " / kg"}
                           </p>
 
-                          <p className="stock-status">
-                            {available > 5 ? (
-                              <span className="in-stock">✔ In Stock</span>
-                            ) : available > 0 ? (
-                              <span className="limited-stock">⚠ Limited Stock</span>
-                            ) : (
-                              <span className="out-stock">✖ Out of Stock</span>
-                            )}
+                          <p>
+                            Available Stock:{" "}
+                            <b>
+                              {available} {isCrop ? "Kg" : ""}
+                            </b>
                           </p>
 
-                          {/* QUANTITY SELECTOR */}
+                          {/* Qty */}
                           <div className="qty-wrapper">
-                            <label><b>Buy Quantity (Kg)</b></label>
+                            <label>
+                              <b>Buy Quantity {isCrop ? "(Kg)" : ""}</b>
+                            </label>
+
                             <div className="qty-box">
                               <button
                                 onClick={() =>
@@ -144,7 +208,11 @@ function Cart() {
                                 max={available}
                                 value={item.qty}
                                 onChange={(e) =>
-                                  updateKg(item.cropId, e.target.value, available)
+                                  updateKg(
+                                    item.cropId,
+                                    e.target.value,
+                                    available
+                                  )
                                 }
                               />
 
@@ -160,11 +228,10 @@ function Cart() {
                           </div>
 
                           <p className="item-total">
-                            Item Total: <b>₹{item.price * item.qty}</b>
+                            Item Total: <b>₹{fmt(item.price * item.qty)}</b>
                           </p>
                         </div>
 
-                        {/* REMOVE BUTTON */}
                         <button
                           className="remove-btn-pro"
                           onClick={() => removeItem(item.cropId)}
@@ -178,40 +245,111 @@ function Cart() {
               )}
             </div>
 
-            {/* RIGHT — SUMMARY */}
+            {/* RIGHT SIDE — ORDER SUMMARY */}
             <div className="cart-summary-card">
               <h2>Order Summary</h2>
 
               <div className="summary-row">
-                <span>Subtotal</span>
-                <b>₹{subtotal}</b>
+                <span>Crops Total</span>
+                <b>₹{fmt(categoryTotal.crops)}</b>
               </div>
 
               <div className="summary-row">
-                <span>Shipping</span>
-                <b>₹0</b>
+                <span>Seeds Total</span>
+                <b>₹{fmt(categoryTotal.seeds)}</b>
               </div>
 
               <div className="summary-row">
-                <span>Taxes (6%)</span>
-                <b>₹{tax}</b>
+                <span>Fertilizers Total</span>
+                <b>₹{fmt(categoryTotal.fert)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>Pesticides Total</span>
+                <b>₹{fmt(categoryTotal.pest)}</b>
+              </div>
+
+              <hr />
+
+              {/* DISCOUNT DISPLAY */}
+              {discountAmount > 0 && (
+                <div className="summary-row">
+                  <span>Discount ({Math.round(discountPct * 100)}%)</span>
+                  <b style={{ color: "green" }}>-₹{fmt(discountAmount)}</b>
+                </div>
+              )}
+
+              <hr />
+
+              {/* GST */}
+              <div className="summary-row">
+                <span>GST (Crops 0%)</span>
+                <b>₹{fmt(gstTotal.crops)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>GST (Seeds 0%)</span>
+                <b>₹{fmt(gstTotal.seeds)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>GST (Fertilizers 5%)</span>
+                <b>₹{fmt(gstTotal.fert)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>GST (Pesticides 18%)</span>
+                <b>₹{fmt(gstTotal.pest)}</b>
+              </div>
+
+              <hr />
+
+              {/* EXTRA CHARGES */}
+              <div className="summary-row">
+                <span>Platform Fee</span>
+                <b>₹{fmt(platformFee)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>Delivery Charge</span>
+                <b>₹{fmt(deliveryCharge)}</b>
               </div>
 
               <hr />
 
               <div className="summary-row total">
                 <span>Grand Total</span>
-                <b>₹{total}</b>
+                <b>₹{fmt(grandTotal)}</b>
               </div>
 
-              <button className="checkout-btn-pro">
+              <button
+                className="checkout-btn-pro"
+                disabled={cart.length === 0}
+                onClick={() => navigate("/checkout")}
+              >
                 Proceed to Checkout
               </button>
 
-              <input
-                className="discount-input"
-                placeholder="Enter Discount Code"
-              />
+              {/* Coupon */}
+              <div className="coupon-row">
+                <input
+                  className="discount-input"
+                  placeholder="Enter Discount Code (SAVE10)"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value)}
+                />
+                <button className="apply-coupon-btn" onClick={applyDiscount}>
+                  Apply
+                </button>
+              </div>
+
+              <button
+                className="clear-cart-btn"
+                disabled={cart.length === 0}
+                onClick={clearCart}
+              >
+                Clear Cart
+              </button>
             </div>
           </div>
         </main>

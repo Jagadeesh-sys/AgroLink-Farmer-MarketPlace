@@ -15,19 +15,23 @@ import Fertilizers from "./pages/Fertilizers";
 
 import Dashboard from "./pages/Dashboard";
 import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />   {/* ⭐ ADD THIS ROUTE */}
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
 
-        {/* Dashboard + Cart have their own layout */}
+        {/* Dashboard + Cart + Checkout have their own layout */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
 
         {/* Marketplace */}
         <Route path="/marketplace" element={<Marketplace />}>

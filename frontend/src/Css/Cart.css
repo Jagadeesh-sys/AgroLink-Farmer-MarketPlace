@@ -31,6 +31,23 @@
   gap: 30px;
 }
 
+/* Better spacing for list of cart cards */
+.cart-list {
+  display: grid;
+  gap: 16px;
+}
+
+/* Responsive stacking */
+@media (max-width: 900px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+  .dashboard-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
 /* LEFT SIDE */
 .cart-items {
   flex: 2.2;
@@ -191,6 +208,14 @@
   font-weight: bold;
   cursor: pointer;
   margin-top: 15px;
+  transition: background 0.2s ease;
+}
+.checkout-btn-pro:hover {
+  background: #28b765;
+}
+.checkout-btn-pro:disabled {
+  background: #b7e8c8;
+  cursor: not-allowed;
 }
 
 .discount-input {
@@ -199,4 +224,62 @@
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-top: 15px;
+}
+
+/* Coupon row and buttons */
+.coupon-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.apply-coupon-btn {
+  padding: 10px 14px;
+  background: #055052;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.apply-coupon-btn:hover {
+  background: #0a807d;
+}
+
+.clear-cart-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e74c3c;
+  background: #fff;
+  color: #e74c3c;
+  font-weight: 700;
+  cursor: pointer;
+}
+.clear-cart-btn:hover {
+  background: #ffecec;
+}
+.clear-cart-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Empty cart message and CTA */
+.empty-cart {
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  padding: 16px;
+  border-radius: 10px;
+}
+.empty-cart-cta {
+  margin-left: 8px;
+  background: #055052;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.empty-cart-cta:hover {
+  background: #0a807d;
 }

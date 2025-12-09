@@ -20,6 +20,14 @@ body {
   margin-top: 70px; /* navbar height */
 }
 
+/* Improve responsiveness for small screens */
+@media (max-width: 900px) {
+  .content-area {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
 /* ===========================================
    SIDEBAR
 =========================================== */
@@ -50,6 +58,21 @@ body {
 .page-content {
   padding: 30px 50px;
   flex: 1;
+}
+
+/* Carded sections for a professional look */
+.graph-section,
+.crop-table-section {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+  padding: 20px 24px;
+}
+
+.graph-section h3,
+.crop-table-section h3 {
+  margin: 0 0 10px 0;
+  color: #055052;
 }
 
 /* ===========================================
@@ -91,6 +114,7 @@ body {
   display: flex;
   gap: 25px;
   margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .stat-card {
@@ -130,6 +154,14 @@ body {
   display: flex;
   gap: 10px;
   margin-top: 20px;
+}
+
+.no-graph {
+  color: #667085;
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  padding: 16px;
+  border-radius: 10px;
 }
 
 .y-axis {
@@ -235,11 +267,35 @@ body {
   background: #f1f5f9;
   padding: 14px;
   font-weight: 600;
+  text-align: left;
 }
 
 .crop-table td {
   padding: 12px;
   border-bottom: 1px solid #eee;
+}
+
+.crop-table tbody tr:hover {
+  background: #f9fbfd;
+}
+
+.no-data {
+  text-align: center;
+  color: #667085;
+  padding: 26px 0;
+}
+
+.empty-state-link {
+  display: inline-block;
+  background: #055052;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.empty-state-link:hover {
+  background: #0a807d;
 }
 
 .crop-img {
