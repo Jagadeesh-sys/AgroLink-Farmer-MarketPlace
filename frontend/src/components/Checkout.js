@@ -24,6 +24,7 @@ function Checkout() {
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(saved);
+
     const u = JSON.parse(localStorage.getItem("userData"));
     if (u) {
       setUser(u);
@@ -31,8 +32,10 @@ function Checkout() {
     }
   }, []);
 
+  // ✅ FIXED IMAGE URL — based on backend/WebContent/uploads
   const getImage = (imgStr) => {
     if (!imgStr) return "/Images/noimg.png";
+
     const first = imgStr.split(",")[0].trim();
     return `http://localhost:9090/backend/uploads/${first}`;
   };
@@ -61,8 +64,10 @@ function Checkout() {
     try {
       setPlacing(true);
       await new Promise((res) => setTimeout(res, 900));
+
       localStorage.setItem("cart", JSON.stringify([]));
       window.dispatchEvent(new Event("cartUpdated"));
+
       navigate("/dashboard", { replace: true });
       alert("Order placed successfully! Your farmer will be notified.");
     } finally {
@@ -73,10 +78,13 @@ function Checkout() {
   return (
     <>
       <Navbar />
+
       <div className="layout">
         <Sidebar cartCount={cart.length} />
+
         <div className="checkout-content">
           <main className="checkout-main" role="main" aria-labelledby="checkout-title">
+
             <header className="checkout-header">
               <div>
                 <h2 id="checkout-title">Checkout</h2>
@@ -85,6 +93,8 @@ function Checkout() {
             </header>
 
             <div className="checkout-grid">
+
+              {/* SHIPPING DETAILS */}
               <section className="card form-card" aria-label="Shipping details">
                 <h3>Shipping Details</h3>
 
@@ -133,6 +143,7 @@ function Checkout() {
                       placeholder="City"
                     />
                   </div>
+
                   <div>
                     <label>State</label>
                     <input
@@ -152,8 +163,10 @@ function Checkout() {
                   />
                 </div>
 
+                {/* PAYMENT METHODS */}
                 <h3>Payment Method</h3>
-                <div className="payment-options" role="radiogroup" aria-label="Payment method">
+
+                <div className="payment-options" role="radiogroup">
                   <label className={`radio ${form.payment === "cod" ? "active" : ""}`}>
                     <input
                       type="radio"
@@ -163,17 +176,20 @@ function Checkout() {
                     />
                     <span>Cash on Delivery</span>
                   </label>
+
                   <label className="radio disabled" title="Coming soon">
                     <input type="radio" disabled />
-                    <span>UPI (Coming soon)</span>
+                    <span>UPI (Coming Soon)</span>
                   </label>
+
                   <label className="radio disabled" title="Coming soon">
                     <input type="radio" disabled />
-                    <span>Card (Coming soon)</span>
+                    <span>Card (Coming Soon)</span>
                   </label>
                 </div>
               </section>
 
+              {/* ORDER SUMMARY */}
               <aside className="card summary-card" aria-label="Order summary">
                 <h3>Order Summary</h3>
 
@@ -183,12 +199,23 @@ function Checkout() {
                   <div className="items-list">
                     {cart.map((item) => (
                       <div className="item-row" key={item.cropId}>
-                        <img className="item-thumb" src={getImage(item.images)} alt={item.cropName} />
+                        
+                        {/* IMAGE FIXED HERE */}
+                        <img
+                          className="item-thumb"
+                          src={getImage(item.images)}
+                          alt={item.cropName}
+                        />
+
                         <div className="item-meta">
                           <strong>{item.cropName}</strong>
                           <span>{item.qty} Kg × ₹{fmt(item.price)}</span>
                         </div>
-                        <div className="item-line">₹{fmt(item.qty * item.price)}</div>
+
+                        <div className="item-line">
+                          ₹{fmt(item.qty * item.price)}
+                        </div>
+
                       </div>
                     ))}
                   </div>
@@ -222,11 +249,14 @@ function Checkout() {
                 </button>
 
                 <p className="secure-note">
-                  <i className="fa-solid fa-lock"></i> Your details are safe and only shared with the seller for delivery.
+                  <i className="fa-solid fa-lock"></i>
+                  &nbsp;Your details are safe and only shared with the seller.
                 </p>
+
               </aside>
             </div>
           </main>
+
           <Footer />
         </div>
       </div>

@@ -6,7 +6,7 @@ function Sidebar({ cartCount }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Helper: Check if route is active
+  // Highlight active menu item
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -20,15 +20,17 @@ function Sidebar({ cartCount }) {
           className={isActive("/dashboard") ? "active" : ""}
           onClick={() => navigate("/dashboard")}
         >
-          <i className="fa-solid fa-gauge"></i> Dashboard
+          <i className="fa-solid fa-gauge"></i>
+          <span>Dashboard</span>
         </li>
 
         {/* My Crops */}
         <li
           className={isActive("/dashboard/mycrops") ? "active" : ""}
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/dashboard/mycrops")}
         >
-          <i className="fa-solid fa-leaf"></i> My Crops
+          <i className="fa-solid fa-leaf"></i>
+          <span>My Crops</span>
         </li>
 
         {/* Cart */}
@@ -36,23 +38,38 @@ function Sidebar({ cartCount }) {
           className={isActive("/cart") ? "active" : ""}
           onClick={() => navigate("/cart")}
         >
-          <i className="fa-solid fa-cart-shopping"></i> Cart
-          <span className="cart-badge">{cartCount}</span>
+          <i className="fa-solid fa-cart-shopping"></i>
+          <span>Cart</span>
+          {cartCount > 0 && (
+            <span className="cart-badge">{cartCount}</span>
+          )}
         </li>
 
         {/* Analytics */}
-        <li>
-          <i className="fa-solid fa-chart-line"></i> Analytics
+        <li
+          className={isActive("/analytics") ? "active" : ""}
+          onClick={() => navigate("/analytics")}
+        >
+          <i className="fa-solid fa-chart-line"></i>
+          <span>Analytics</span>
         </li>
 
         {/* Settings */}
-        <li>
-          <i className="fa-solid fa-gear"></i> Settings
+        <li
+          className={isActive("/settings") ? "active" : ""}
+          onClick={() => navigate("/settings")}
+        >
+          <i className="fa-solid fa-gear"></i>
+          <span>Settings</span>
         </li>
 
         {/* Support */}
-        <li>
-          <i className="fa-solid fa-headset"></i> Support
+        <li
+          className={isActive("/support") ? "active" : ""}
+          onClick={() => navigate("/support")}
+        >
+          <i className="fa-solid fa-headset"></i>
+          <span>Support</span>
         </li>
 
       </ul>

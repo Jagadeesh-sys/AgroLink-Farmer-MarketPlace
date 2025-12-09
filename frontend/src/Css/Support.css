@@ -1,0 +1,132 @@
+/* ===========================================
+   SUPPORT PAGE
+=========================================== */
+
+.support-page {
+  padding: 30px;
+}
+
+.support-page h2 {
+  color: #0f3d3e;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: #5e6d6e;
+  margin-bottom: 25px;
+}
+
+/* GRID LAYOUT */
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* CARD STYLE */
+.support-card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: 0.25s ease;
+}
+
+.support-card:hover {
+  transform: translateY(-5px);
+}
+
+.support-card h3 {
+  color: #0f3d3e;
+  margin-bottom: 15px;
+}
+
+/* CONTACT DETAILS */
+.support-card p {
+  color: #4f5f60;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.support-card p i {
+  margin-right: 10px;
+  color: #0f3d3e;
+}
+
+/* SOCIAL ICONS */
+.social-icons i {
+  font-size: 20px;
+  margin-right: 12px;
+  cursor: pointer;
+  color: #0f3d3e;
+  transition: 0.25s ease;
+}
+
+.social-icons i:hover {
+  color: #1a5f60;
+}
+
+/* FAQ LIST */
+.faq-list {
+  padding-left: 18px;
+}
+
+.faq-list li {
+  margin-bottom: 8px;
+  color: #4f5f60;
+}
+
+/* FORM INPUT FIELDS */
+.support-card label {
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 10px;
+  font-size: 15px;
+  color: #0f3d3e;
+}
+
+.support-card input,
+.support-card textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #c9d1d1;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: 0.2s ease;
+}
+
+.support-card input:focus,
+.support-card textarea:focus {
+  outline: none;
+  border-color: #0f3d3e;
+}
+
+.support-card textarea {
+  height: 110px;
+  resize: none;
+}
+
+/* SEND BUTTON */
+.send-btn {
+  background: #0f3d3e;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  transition: 0.2s ease;
+}
+
+.send-btn:hover {
+  background: #1a5f60;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .support-page {
+    padding: 20px;
+  }
+}

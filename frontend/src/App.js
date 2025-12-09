@@ -16,24 +16,42 @@ import Fertilizers from "./pages/Fertilizers";
 import Dashboard from "./pages/Dashboard";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
+import Contact from "./pages/Contact";
+
+/* ⭐ Newly Added Pages */
+import Analytics from "./components/Analytics";
+import MyCrops from "./components/MyCrops";
+import Settings from "./components/Settings";
+import Support from "./components/Support";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />   {/* ⭐ ADD THIS ROUTE */}
 
+        {/* HOME */}
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+
+        {/* AUTH */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
 
-        {/* Dashboard + Cart + Checkout have their own layout */}
+        {/* DASHBOARD */}
         <Route path="/dashboard" element={<Dashboard />} />
+
+        {/* SIDEBAR PAGES */}
+        <Route path="/dashboard/mycrops" element={<MyCrops />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/support" element={<Support />} />
+
+        {/* CART FLOW */}
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
 
-        {/* Marketplace */}
+        {/* MARKETPLACE */}
         <Route path="/marketplace" element={<Marketplace />}>
           <Route index element={<Seeds />} />
           <Route path="sell" element={<Sell />} />
@@ -42,6 +60,9 @@ function App() {
           <Route path="pesticides" element={<Pesticides />} />
           <Route path="fertilizers" element={<Fertilizers />} />
         </Route>
+
+        {/* CONTACT */}
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );

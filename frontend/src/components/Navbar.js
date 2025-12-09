@@ -6,15 +6,12 @@ function Navbar() {
   const [userName, setUserName] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
-
   const dropdownRef = useRef(null);
 
   // Load user from localStorage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userData"));
-    if (user) {
-      setUserName(user.fullName);
-    }
+    if (user) setUserName(user.fullName);
   }, []);
 
   // Close dropdown when clicking outside
@@ -35,35 +32,35 @@ function Navbar() {
 
   return (
     <nav className="nav">
-      {/* LEFT SIDE - LOGO */}
+      {/* LOGO */}
       <div className="nav-left" onClick={() => navigate("/home")} style={{ cursor: "pointer" }}>
         <img src="/Images/Logo1.png" alt="AgroLink Logo" className="logo" />
       </div>
 
-      {/* CENTER MENU */}
+      {/* MENU */}
       <ul className="nav-menu">
         <li onClick={() => navigate("/home")}>Home</li>
         <li onClick={() => navigate("/marketplace")}>Marketplace</li>
-        <li>Inputs</li>
-        <li>Loans</li>
-        <li>Insurance</li>
-        <li>Impact</li>
-        <li>Contact</li>
+        <li onClick={() => navigate("/marketplace/seeds")}>Inputs</li>
+        <li onClick={() => navigate("/loans")}>Loans</li>
+        <li onClick={() => navigate("/insurance")}>Insurance</li>
+        <li onClick={() => navigate("/impact")}>Impact</li>
+
+        {/* ⭐ FINAL WORKING CONTACT LINK */}
+        <li onClick={() => navigate("/contact")}>Contact</li>
       </ul>
 
-      {/* RIGHT SIDE – USER PROFILE OR LOGIN BUTTONS */}
+      {/* USER PROFILE / LOGIN BUTTONS */}
       {userName ? (
         <div className="profile-dropdown-container" ref={dropdownRef}>
-          <div
-            className="profile-mini"
-            onClick={() => setShowMenu((prev) => !prev)}
-          >
+          <div className="profile-mini" onClick={() => setShowMenu((prev) => !prev)}>
             <div className="profile-circle">{userName.charAt(0)}</div>
             <span className="profile-text">{userName}</span>
           </div>
 
           {showMenu && (
             <div className="profile-dropdown">
+
               <p onClick={() => { navigate("/profile"); setShowMenu(false); }}>
                 <i className="fa-solid fa-user"></i> My Profile
               </p>
@@ -79,6 +76,7 @@ function Navbar() {
               <p className="logout" onClick={handleLogout}>
                 <i className="fa-solid fa-right-from-bracket"></i> Logout
               </p>
+
             </div>
           )}
         </div>

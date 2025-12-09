@@ -209,6 +209,21 @@ body {
 }
 
 /* ===========================================
+   UNIFIED IMAGE STYLE (SMALL SQUARE IMAGES)
+=========================================== */
+.crop-img,
+.item-thumb,
+.square-img {
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #fafafa;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+}
+
+/* ===========================================
    HIGHEST LIST
 =========================================== */
 .highest-list {
@@ -242,7 +257,6 @@ body {
   color: #2e7d32;
 }
 
-/* Responsive */
 @media(max-width: 900px) {
   .highest-list {
     width: 100%;
@@ -298,15 +312,8 @@ body {
   background: #0a807d;
 }
 
-.crop-img {
-  width: 55px;
-  height: 55px;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
 /* ===========================================
-   ACTION BUTTONS (EDIT + DELETE)
+   ACTION BUTTONS
 =========================================== */
 .action-btns {
   display: flex;
@@ -340,7 +347,7 @@ body {
 /* DELETE */
 .delete-btn {
   background: none;
-  color: #2e7d32;
+  color: #e63946;
 }
 .delete-btn:hover {
   background: #ffcdcd;
@@ -348,7 +355,7 @@ body {
 }
 
 /* ===========================================
-   EDIT POPUP OVERLAY
+   EDIT POPUP
 =========================================== */
 .edit-popup {
   position: fixed;
@@ -361,9 +368,6 @@ body {
   backdrop-filter: blur(3px);
 }
 
-/* ===========================================
-   EDIT POPUP WINDOW
-=========================================== */
 .edit-box {
   background: #ffffff;
   padding: 25px 35px;
@@ -386,22 +390,17 @@ body {
   font-weight: 700;
 }
 
-/* INPUTS */
-/* Reduce input & textarea width */
 .edit-box input,
 .edit-box textarea {
-  width: 85%;                  /* reduced from 100% */
-  margin: 10px auto;           /* centers the input fields */
-  display: block;              /* ensure centering works */
+  width: 85%;
+  margin: 10px auto;
+  display: block;
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid #cfd4d8;
   font-size: 14px;
-  transition: 0.2s;
   background: #f9fcfc;
 }
-
-/* Smaller textarea height */
 
 .edit-box textarea {
   height: 90px;
@@ -414,8 +413,6 @@ body {
   background: #fff;
   box-shadow: 0 0 0 3px rgba(10,128,125,0.15);
 }
-
-
 
 /* ===========================================
    EDIT POPUP BUTTONS
@@ -443,7 +440,6 @@ body {
 .save-btn {
   background: #2ecc71;
   color: white;
-  box-shadow: 0 3px 8px rgba(46,204,113,0.3);
 }
 .save-btn:hover {
   background: #28b765;
@@ -453,19 +449,13 @@ body {
 .cancel-btn {
   background: #e74c3c;
   color: white;
-  box-shadow: 0 3px 8px rgba(231,76,60,0.3);
 }
 .cancel-btn:hover {
   background: #cf3a2b;
 }
 
-.save-btn i,
-.cancel-btn i {
-  font-size: 18px;
-}
-
 /* ===========================================
-   SIDEBAR CART BADGE
+   CART BADGE
 =========================================== */
 .menu li {
   position: relative;

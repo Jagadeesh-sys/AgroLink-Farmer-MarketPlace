@@ -44,11 +44,11 @@ function Footer() {
           <h3><i className="fa fa-share-alt"></i> Follow Us</h3>
 
           <div className="social-icons">
-            <a href="javascript:void(0)"><i className="fab fa-facebook-f"></i></a>
-            <a href="javascript:void(0)"><i className="fab fa-instagram"></i></a>
-            <a href="javascript:void(0)"><i className="fab fa-x-twitter"></i></a>
-            <a href="javascript:void(0)"><i className="fab fa-youtube"></i></a>
-            <a href="javascript:void(0)"><i className="fab fa-whatsapp"></i></a>
+            <a href="#" onClick={(e) => e.preventDefault()}><i className="fab fa-facebook-f"></i></a>
+            <a href="#" onClick={(e) => e.preventDefault()}><i className="fab fa-instagram"></i></a>
+            <a href="#" onClick={(e) => e.preventDefault()}><i className="fab fa-x-twitter"></i></a>
+            <a href="#" onClick={(e) => e.preventDefault()}><i className="fab fa-youtube"></i></a>
+            <a href="#" onClick={(e) => e.preventDefault()}><i className="fab fa-whatsapp"></i></a>
           </div>
         </div>
 

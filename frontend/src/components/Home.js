@@ -3,10 +3,14 @@ import "../Css/Home.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
+// ⭐ IMPORT CONTACT PAGE
+import Contact from "../pages/Contact";
+
 function Home() {
   return (
     <>
       <Navbar />
+
       <div className="home">
 
         {/* HERO SECTION */}
@@ -29,44 +33,47 @@ function Home() {
         </section>
 
         {/* HOW AGROLINK WORKS */}
-	    <section className="how-section">
-	      <h2>How AgroLink Works</h2>
+        <section className="how-section">
+          <h2>How AgroLink Works</h2>
 
-	      <div className="how-container">
+          <div className="how-container">
 
-	        <div className="how-box">
-	          <div className="icon-circle">
-	            <i className="fas fa-search"></i>
-	          </div>
-	          <p>Direct Marketplace</p>
-	        </div>
+            <div className="how-box">
+              <div className="icon-circle">
+                <i className="fas fa-search"></i>
+              </div>
+              <p>Direct Marketplace</p>
+            </div>
 
-	        <div className="how-box">
-	          <div className="icon-circle">
-	            <i className="fas fa-shopping-cart"></i>
-	          </div>
-	          <p>Connect & Transact</p>
-	        </div>
+            <div className="how-box">
+              <div className="icon-circle">
+                <i className="fas fa-shopping-cart"></i>
+              </div>
+              <p>Connect & Transact</p>
+            </div>
 
-	        <div className="how-box">
-	          <div className="icon-circle">
-	            <i className="fas fa-piggy-bank"></i>
-	          </div>
-	          <p>Loans & Financing</p>
-	        </div>
+            <div className="how-box">
+              <div className="icon-circle">
+                <i className="fas fa-piggy-bank"></i>
+              </div>
+              <p>Loans & Financing</p>
+            </div>
 
-	        <div className="how-box">
-	          <div className="icon-circle">
-	            <i className="fas fa-shield-alt"></i>
-	          </div>
-	          <p>Insurance Simplified</p>
-	        </div>
+            <div className="how-box">
+              <div className="icon-circle">
+                <i className="fas fa-shield-alt"></i>
+              </div>
+              <p>Insurance Simplified</p>
+            </div>
 
-	      </div>
-	    </section>
+          </div>
+        </section>
 
+        {/* ⭐ DISPLAY CONTACT SECTION FROM Contact.js */}
+        <Contact />
 
       </div>
+
       <Footer />
     </>
   );

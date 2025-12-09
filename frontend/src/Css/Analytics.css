@@ -1,0 +1,155 @@
+/* ===========================================
+   ANALYTICS PAGE
+=========================================== */
+.analytics-container {
+  padding: 30px;
+}
+
+.analytics-container h2 {
+  color: #0f3d3e;
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #5e6d6e;
+  margin-bottom: 25px;
+}
+
+/* ===========================================
+   STATS CARDS
+=========================================== */
+.analytics-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.a-card {
+  flex: 1;
+  min-width: 240px;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: 0.25s ease;
+}
+
+.a-card:hover {
+  transform: translateY(-3px);
+}
+
+.a-card h3 {
+  color: #0f3d3e;
+}
+
+.big {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a5456;
+}
+
+/* ===========================================
+   CHART CONTAINER
+=========================================== */
+.analytics-chart {
+  margin-top: 40px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.analytics-chart h3 {
+  color: #0f3d3e;
+}
+
+/* ===========================================
+   FIXED BAR CHART (NO OVERLAP + SCROLLABLE)
+=========================================== */
+.bar-chart {
+  margin-top: 30px;
+  display: flex;
+  align-items: flex-end;
+  gap: 25px;
+  height: 260px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #0f3d3e #eaeaea;
+}
+
+.bar-chart::-webkit-scrollbar {
+  height: 8px;
+}
+
+.bar-chart::-webkit-scrollbar-thumb {
+  background: #0f3d3e;
+  border-radius: 8px;
+}
+
+.bar-chart::-webkit-scrollbar-track {
+  background: #eaeaea;
+}
+
+/* ===========================================
+   BAR ITEM
+=========================================== */
+.bar-item {
+  flex: 0 0 70px;     /* FIX: Prevent overlap */
+  text-align: center;
+  position: relative;
+}
+
+/* BAR STYLE + ANIMATION */
+.bar {
+  width: 45px;
+  background: linear-gradient(180deg, #1d6b6c, #0f3d3e);
+  border-radius: 10px 10px 4px 4px;
+  margin: 0 auto;
+
+  /* grow animation */
+  animation: grow 0.9s ease-out;
+  transform-origin: bottom;
+}
+
+/* Smooth growing-up animation */
+@keyframes grow {
+  0% {
+    height: 0;
+    transform: translateY(6px);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Hover floating effect */
+.bar:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* CROP NAME LABEL */
+.bar-item span {
+  margin-top: 8px;
+  display: block;
+  font-size: 13px;
+  color: #0f3d3e;
+  word-break: break-word;
+}
+
+/* ===========================================
+   RESPONSIVE BEHAVIOR
+=========================================== */
+@media (max-width: 768px) {
+  .bar-item {
+    flex: 0 0 55px;
+  }
+  .bar {
+    width: 35px;
+  }
+}
