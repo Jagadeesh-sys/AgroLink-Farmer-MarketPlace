@@ -1,0 +1,549 @@
+/* ----------------------------------------------
+   GLOBAL PAGE STYLING
+---------------------------------------------- */
+.loan-container {
+  padding: 40px;
+  font-family: "Poppins", sans-serif;
+  background: #f4f8fb;
+}
+
+/* ----------------------------------------------
+   HERO SECTION
+---------------------------------------------- */
+.loan-hero {
+  background: linear-gradient(rgba(0, 70, 67, 0.5), rgba(0, 70, 67, 0.6)),
+    url("https://images.unsplash.com/photo-1542831371-d531d36971e6?auto=format&fit=crop&w=1500&q=80")
+      center/cover no-repeat;
+  color: white;
+  padding: 90px 40px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 50px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.loan-hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.loan-hero p {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+/* ----------------------------------------------
+   SECTION TITLES
+---------------------------------------------- */
+.section-title {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #044a48;
+  font-weight: 700;
+  border-left: 5px solid #044a48;
+  padding-left: 12px;
+}
+
+/* =====================================================
+   PROFESSIONAL LOAN PRODUCTS (NEW MODERN UI)
+===================================================== */
+.loan-products-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 45px;
+  width: 100%;
+}
+
+
+.loan-product-card {
+  background: linear-gradient(135deg, #e8fff0, #d2f7e3, #ebfff7);
+  padding: 30px 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid #d7e8e1;
+  transition: 0.25s ease;
+  text-align: center;
+}
+
+
+.loan-product-card:hover {
+  transform: translateY(-8px);
+  border-color: #68b547;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.20);
+}
+
+
+.loan-product-icon {
+  font-size: 42px;
+  color: #055052;
+  margin-bottom: 12px;
+}
+
+.loan-product-card h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+  color: #044a48;
+}
+
+.loan-product-card p {
+  font-size: 14px;
+  color: #5b6d6b;
+  margin-bottom: 10px;
+}
+
+.loan-product-card span {
+  font-size: 12px;
+  background: #e9f8e5;
+  padding: 6px 14px;
+  border-radius: 50px;
+  color: #2f7a13;
+  font-weight: 600;
+}
+
+/* =====================================================
+   EMI CALCULATOR (NEW PREMIUM UI)
+===================================================== */
+.emi-box {
+  display: flex;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.emi-left {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.emi-left label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.emi-left input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccd6d4;
+  background: #ffffff;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.emi-left input:focus {
+  border-color: #055052;
+  box-shadow: 0 0 0 2px rgba(5, 80, 82, 0.15);
+}
+
+.emi-right {
+  width: 50%;
+  background: linear-gradient(135deg, #055052, #077a74);
+  color: white;
+  padding: 35px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.2);
+}
+
+.emi-right h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.emi-value {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.emi-right span {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ======================================================
+   KISANLEND-STYLE APPLICATION CARD (MULTI-STEP)
+===================================================== */
+.loan-application-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 24px 26px 28px;
+  max-width: 900px;
+  margin: 0 auto 60px auto;
+}
+
+/* header */
+.loan-app-header h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.loan-app-header p {
+  font-size: 14px;
+  color: #6c6c6c;
+}
+
+/* progress bar */
+.loan-app-progress {
+  margin-top: 16px;
+  width: 100%;
+  height: 6px;
+  background: #e6eceb;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.loan-app-progress-fill {
+  height: 100%;
+  background: #68b547;
+  width: 33%;
+  transition: width 0.3s ease;
+}
+
+/* step content */
+.loan-step-content {
+  margin-top: 24px;
+}
+
+.loan-step-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* grid layout */
+.loan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+.loan-grid .field {
+  display: flex;
+  flex-direction: column;
+}
+
+.loan-grid .field.wide {
+  grid-column: span 2;
+}
+
+.loan-grid label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.loan-grid input,
+.loan-grid select,
+.loan-grid textarea {
+  border-radius: 10px;
+  border: 1px solid #d3dad9;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fdfefe;
+  transition: 0.2s;
+}
+
+.loan-grid input:focus,
+.loan-grid select:focus,
+.loan-grid textarea:focus {
+  border-color: #68b547;
+  box-shadow: 0 0 0 2px rgba(104, 181, 71, 0.15);
+}
+
+/* OTP button */
+.otp-btn {
+  border: none;
+  background: #e8f4e2;
+  color: #2f7a13;
+  padding: 5px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* step buttons */
+.loan-step-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.loan-step-actions.single {
+  justify-content: space-between;
+}
+
+.next-btn,
+.back-btn {
+  padding: 10px 18px;
+  border-radius: 50px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.next-btn {
+  background: #055052;
+  color: white;
+}
+
+.next-btn:hover {
+  background: #033b3d;
+}
+
+.back-btn {
+  background: #e0e0e0;
+  color: #333333;
+}
+
+.back-btn:hover {
+  background: #c8c8c8;
+}
+
+/* final submit */
+.submit-main-btn {
+  padding: 12px 26px;
+  border-radius: 50px;
+  border: none;
+  background: #68b547;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.submit-main-btn:hover {
+  background: #4e8f36;
+}
+
+/* =====================================================
+   UPLOAD CARDS (with FA Icons)
+===================================================== */
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.upload-card {
+  position: relative;
+  border-radius: 12px;
+  border: 1.6px dashed #cdd6d4;
+  background: #fafdfc;
+  padding: 18px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upload-card:hover {
+  border-color: #68b547;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.upload-card input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* FontAwesome icon */
+.upload-fa-icon {
+  font-size: 32px;
+  color: #68b547;
+  margin-bottom: 8px;
+}
+
+.upload-card p {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.upload-card span {
+  font-size: 11px;
+  color: #6d7775;
+}
+
+/* =====================================================
+   TERMS & DECLARATION
+===================================================== */
+.terms-box {
+  margin-top: 18px;
+  padding: 16px;
+  background: #f8fbf7;
+  border-radius: 10px;
+  border: 1px solid #dfe8dd;
+}
+
+.terms-box h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #055052;
+}
+
+.terms-box ul {
+  padding-left: 18px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.declaration-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  margin-top: 12px;
+  color: #2e3d37;
+}
+
+.declaration-row input {
+  width: 18px;
+  height: 18px;
+}
+
+/* SUCCESS POPUP OVERLAY */
+.success-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+}
+
+/* SUCCESS CARD */
+.success-box {
+  width: 340px;
+  background: #ffffff;
+  padding: 25px 30px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0px 10px 28px rgba(0, 0, 0, 0.22);
+  animation: popupScale 0.25s ease;
+}
+
+/* GREEN CHECK ICON */
+.success-icon {
+  width: 70px;
+  height: 70px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 12px;
+}
+
+/* TEXT */
+.success-box h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.success-box p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* BUTTON */
+.success-btn {
+  width: 120px;
+  padding: 10px 0;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s ease;
+}
+
+.success-btn:hover {
+  background: #43a047;
+}
+
+/* POPUP ANIMATION */
+@keyframes popupScale {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ----------------------------------------------
+   RESPONSIVE DESIGN
+---------------------------------------------- */
+@media (max-width: 768px) {
+  .emi-box {
+    flex-direction: column;
+  }
+
+  .emi-left,
+  .emi-right {
+    width: 100%;
+  }
+
+  .upload-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .loan-products-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------------------------
+   ANIMATIONS
+---------------------------------------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

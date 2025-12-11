@@ -17,6 +17,8 @@ import Dashboard from "./pages/Dashboard";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import Contact from "./pages/Contact";
+import LoanPage from "./pages/LoanPage";
+
 
 /* ⭐ Newly Added Pages */
 import Analytics from "./components/Analytics";
@@ -62,6 +64,8 @@ function App() {
         </Route>
 
         {/* CONTACT */}
+		<Route path="/loans" element={<LoanPage />} />
+
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>

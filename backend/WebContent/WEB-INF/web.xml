@@ -83,6 +83,23 @@
 	    <servlet-name>GetAllCropsServlet</servlet-name>
 	    <url-pattern>/api/crop/all</url-pattern>
 	</servlet-mapping>
+	<!-- Loan -->
+	 <!-- LOAN APPLY SERVLET  
+         ❗ DO NOT ADD @WebServlet("/LoanApplyServlet") IN JAVA
+         Using only web.xml mapping to avoid duplicate mapping error
+    -->
+   <servlet>
+    <servlet-name>LoanApplyServlet</servlet-name>
+    <servlet-class>com.agrolink.servlets.LoanApplyServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>LoanApplyServlet</servlet-name>
+    <url-pattern>/api/loan/apply</url-pattern>
+</servlet-mapping>
+
+		
+		
 
 	
     

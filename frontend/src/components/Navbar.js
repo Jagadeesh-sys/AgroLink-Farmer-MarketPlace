@@ -42,7 +42,7 @@ function Navbar() {
         <li onClick={() => navigate("/home")}>Home</li>
         <li onClick={() => navigate("/marketplace")}>Marketplace</li>
         <li onClick={() => navigate("/marketplace/seeds")}>Inputs</li>
-        <li onClick={() => navigate("/loans")}>Loans</li>
+		<li onClick={() => navigate("/loans")}>Loans</li>
         <li onClick={() => navigate("/insurance")}>Insurance</li>
         <li onClick={() => navigate("/impact")}>Impact</li>
 
