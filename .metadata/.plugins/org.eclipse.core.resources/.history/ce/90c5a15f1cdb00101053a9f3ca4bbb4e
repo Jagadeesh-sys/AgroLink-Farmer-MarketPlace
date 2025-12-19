@@ -1,0 +1,5 @@
+package com.agrolink.db;
+
+public class DBConnection {
+
+}

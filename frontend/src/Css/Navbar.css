@@ -1,0 +1,247 @@
+/* ======================================
+   FIXED NAVBAR — ALWAYS ON TOP
+====================================== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 50px;
+
+  background: #ffffff;
+  color: #055052;
+
+  z-index: 5000;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* --------------------------------------
+   LEFT LOGO
+-------------------------------------- */
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 150px;
+  margin-top:25px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+/* --------------------------------------
+   CENTER MENU
+-------------------------------------- */
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 35px;
+
+  flex: 1;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-menu li {
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 500;
+  position: relative;
+  color: #055052;
+}
+
+/* underline hover */
+.nav-menu li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 3px;
+  background: #8fe18f;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.nav-menu li:hover::after {
+  width: 100%;
+}
+
+/* active page styling */
+.nav-menu .active {
+  color: #000;
+  font-weight: 700;
+}
+
+.nav-menu .active::after {
+  width: 100%;
+}
+
+/* --------------------------------------
+   RIGHT SIDE BUTTONS (LOGIN / SIGNUP)
+-------------------------------------- */
+.nav-btns {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Signup Button */
+.signup {
+  background: #8fe18f;
+  color: #000;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 4px 12px rgba(143, 225, 143, 0.35);
+  transition: all 0.3s ease;
+}
+
+.signup:hover {
+  background: #7cd57c;
+  transform: translateY(-2px);
+}
+
+/* Login Button */
+.login {
+  background: #055052;
+  color: white;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s ease;
+}
+
+.login:hover {
+  background: #03393a;
+}
+
+/* --------------------------------------
+   PROFILE (LOGGED IN USER)
+-------------------------------------- */
+.profile-dropdown-container {
+  position: relative;
+}
+
+.profile-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  background: #8fe18f;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 700;
+  font-size: 17px;
+}
+
+.profile-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: #055052;
+}
+
+/* --------------------------------------
+   DROPDOWN MENU
+-------------------------------------- */
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 65px;
+
+  background: #fff;
+  width: 220px;
+
+  border-radius: 12px;
+  padding: 12px 0;
+
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+
+  animation: dropdownFade 0.25s ease-out;
+  z-index: 9999;
+}
+
+.profile-dropdown p {
+  padding: 12px 18px;
+  margin: 0;
+  font-size: 15px;
+  cursor: pointer;
+  color: #055052;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+}
+
+.profile-dropdown p:hover {
+  background: #f2fdf2;
+}
+
+/* icons inside dropdown */
+.profile-dropdown p i {
+  margin-right: 12px;
+  width: 18px;
+  text-align: center;
+  color: #055052;
+}
+
+/* logout special styling */
+.profile-dropdown .logout {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.profile-dropdown .logout i {
+  color: #c0392b;
+}
+
+.profile-dropdown .logout:hover {
+  background: #ffeaea;
+}
+
+/* Animation */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------
+   PAGE SPACING FIX (VERY IMPORTANT)
+-------------------------------------- */
+
+/* Prevent content from hiding behind fixed navbar */
+body,
+.dashboard-container,
+.dashboard-main {
+  padding-top: 80px !important;
+}

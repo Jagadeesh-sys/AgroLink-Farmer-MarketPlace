@@ -1,0 +1,22 @@
+
+package com.agrolink;
+
+import org.apache.catalina.startup.Tomcat;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+
+        int port = Integer.parseInt(
+            System.getenv().getOrDefault("PORT", "8080")
+        );
+
+        Tomcat tomcat = new Tomcat();
+        tomcat.setPort(port);
+
+        tomcat.getConnector();
+        tomcat.addWebapp("", System.getProperty("java.io.tmpdir"));
+
+        tomcat.start();
+        tomcat.getServer().await();
+    }
+}

@@ -1,0 +1,110 @@
+package com.agrolink.servlets;
+
+import java.io.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.*;
+
+import com.agrolink.dao.LoanDAO;
+import com.agrolink.model.LoanApplication;
+
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024,
+    maxFileSize = 1024 * 1024 * 5,
+    maxRequestSize = 1024 * 1024 * 20
+)
+public class LoanApplyServlet extends BaseServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+
+        setCors(req, resp);
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        System.out.println("LoanApplyServlet started");
+
+        LoanDAO dao = new LoanDAO();
+
+        // ✅ Dynamic upload path
+        String uploadPath = req.getServletContext().getRealPath("/uploads/");
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+
+        // ------------------------------
+        // 1️⃣ Aadhaar Duplication Check
+        // ------------------------------
+        String aadhaar = req.getParameter("aadhaar");
+
+        if (dao.isAadhaarExists(aadhaar)) {
+            resp.getWriter().write(
+                "{\"status\":\"ERROR\", \"message\":\"Aadhaar already registered\"}"
+            );
+            return;
+        }
+
+        // ------------------------------
+        // 2️⃣ Create Loan Application
+        // ------------------------------
+        LoanApplication loan = new LoanApplication();
+
+        String loanId = dao.generateLoanId();
+        loan.setLoanId(loanId);
+
+        loan.setFullName(req.getParameter("fullName"));
+        loan.setDob(req.getParameter("dob"));
+        loan.setAadhaar(aadhaar);
+        loan.setAddress(req.getParameter("address"));
+        loan.setState(req.getParameter("state"));
+        loan.setPinCode(req.getParameter("pinCode"));
+        loan.setPhone(req.getParameter("phone"));
+        loan.setEmail(req.getParameter("email"));
+
+        loan.setLoanAmountNeeded(req.getParameter("loanAmountNeeded"));
+        loan.setLoanPurpose(req.getParameter("loanPurpose"));
+        loan.setCropActivity(req.getParameter("cropActivity"));
+        loan.setLandArea(req.getParameter("landArea"));
+        loan.setTotalLandActivity(req.getParameter("totalLandActivity"));
+
+        loan.setIdProof(saveFile(req.getPart("idProof"), uploadPath));
+        loan.setAddressProof(saveFile(req.getPart("addressProof"), uploadPath));
+        loan.setLandProof(saveFile(req.getPart("landProof"), uploadPath));
+
+        // ------------------------------
+        // 3️⃣ Save to Database
+        // ------------------------------
+        boolean ok = dao.saveLoanApplication(loan);
+
+        // ------------------------------
+        // 4️⃣ Send JSON Response
+        // ------------------------------
+        if (ok) {
+            resp.getWriter().write(
+                "{\"status\":\"SUCCESS\", \"loanId\":\"" + loanId + "\"}"
+            );
+        } else {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write(
+                "{\"status\":\"ERROR\", \"message\":\"Database error\"}"
+            );
+        }
+    }
+
+    // ------------------------------
+    // Save uploaded file
+    // ------------------------------
+    private String saveFile(Part part, String uploadPath) throws IOException {
+
+        if (part == null || part.getSize() == 0) return null;
+
+        String fileName = part.getSubmittedFileName();
+        if (fileName == null || fileName.trim().isEmpty()) return null;
+
+        String finalName = System.currentTimeMillis() + "_" + fileName;
+        part.write(uploadPath + File.separator + finalName);
+
+        return finalName;
+    }
+}

@@ -1,0 +1,118 @@
+.buy-container {
+  padding: 20px;
+  background: white;
+  min-height: 60vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Title */
+.buy-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #055052;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.buy-title i {
+  color: #2e7d32;
+}
+
+/* Search Box */
+.buy-search-box {
+  width: 60%;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  background: #f1f1f1;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 30px;
+  border: 1px solid #dcdcdc;
+}
+
+.buy-search-box i {
+  color: #555;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.buy-search-box input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  outline: none;
+}
+
+/* Product Grid */
+.buy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+  padding: 10px;
+}
+
+/* Product Card - Flat UI (NO shadow) */
+.buy-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #e4e4e4; /* Clean subtle border */
+  transition: 0.3s;
+}
+
+.buy-card:hover {
+  transform: translateY(-4px);
+  border-color: #c7c7c7; /* Slight highlight on hover */
+}
+
+/* Product Image */
+.buy-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Product Name */
+.buy-name {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #044444;
+}
+
+/* Price */
+.buy-price {
+  margin: 8px 0 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* Buy Now Button */
+.buy-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.buy-btn i {
+  margin-right: 6px;
+}
+
+.buy-btn:hover {
+  background: #3e8c40;
+}

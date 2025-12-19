@@ -1,0 +1,118 @@
+/* ====================================================
+   MAIN PAGE CONTAINER
+==================================================== */
+.marketplace-container {
+    width: 100%;
+    min-height: 100vh;
+    background: #ffffff;
+    padding: 40px 0;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ====================================================
+   INTERNAL NAV MENU (Centered)
+==================================================== */
+.marketplace-nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    background: #ffffff;
+    padding: 15px 0;
+    margin-bottom: 40px;
+}
+
+/* ====================================================
+   TABS STYLING
+==================================================== */
+.mp-tab {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #055052;
+    cursor: pointer;
+    position: relative;
+    padding: 8px 5px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+
+/* icons */
+.mp-tab i {
+    font-size: 20px;
+    color: #2e7d32;
+}
+
+/* ⭐ Underline hover restored */
+.mp-tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 3px;
+    background: #8fe18f;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.mp-tab:hover::after {
+    width: 100%;
+}
+
+/* Active Tab underline */
+.mp-tab.active::after {
+    width: 100%;
+}
+
+/* Active Tab text */
+.mp-tab.active {
+    font-weight: 700;
+    color: #000;
+}
+
+/* ====================================================
+   PAGE CONTENT
+==================================================== */
+.marketplace-content {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.marketplace-content h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #055052;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.marketplace-content h2 i {
+    color: #2e7d32;
+}
+
+/* ====================================================
+   RESPONSIVE
+==================================================== */
+@media (max-width: 900px) {
+    .marketplace-nav {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .mp-tab {
+        font-size: 16px;
+    }
+
+    .marketplace-content h2 {
+        font-size: 24px;
+    }
+}

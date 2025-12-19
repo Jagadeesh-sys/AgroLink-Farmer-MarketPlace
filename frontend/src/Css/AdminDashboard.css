@@ -1,0 +1,391 @@
+/* AdminDashboard.css */
+
+/* ================== VARIABLES & GLOBALS ================== */
+:root {
+  --primary-color: #007bff; /* Blue for primary actions/accents */
+  --secondary-color: #6c757d; /* Grey for secondary text */
+  --background-color: #f8f9fa; /* Light grey/off-white background */
+  --card-background: #ffffff; /* White for cards/containers */
+  --border-color: #dee2e6; /* Light border color */
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --header-height: 60px; /* Assuming Navbar is 60px tall */
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: #343a40;
+  margin: 0;
+  padding-top: var(--header-height); /* Space for fixed Navbar */
+}
+
+/* ================== MAIN CONTAINER ================== */
+.admin-container {
+  padding: 30px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-container h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 5px;
+  border-bottom: 3px solid var(--primary-color);
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.admin-subtitle {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+}
+
+/* ================== LOADING & ERROR ================== */
+.admin-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.admin-loading.error {
+  color: var(--danger-color);
+}
+
+/* ================== STATS CARDS ================== */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid var(--primary-color); /* Primary accent */
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-card p {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+}
+
+/* Color accents for specific cards (optional but professional) */
+.admin-stats > div:nth-child(1) { border-left-color: #ffc107; } /* Users: Yellow */
+.admin-stats > div:nth-child(2) { border-left-color: #17a2b8; } /* Crops: Cyan */
+.admin-stats > div:nth-child(3) { border-left-color: #fd7e14; } /* Loans: Orange */
+.admin-stats > div:nth-child(4) { border-left-color: var(--success-color); } /* Insurance: Green */
+
+
+/* ================== TABLE SECTIONS (Data Display) ================== */
+.admin-section {
+  margin-bottom: 40px;
+  background-color: var(--card-background);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.admin-section h2 {
+  font-size: 1.8rem;
+  color: #212529;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.admin-table {
+  overflow-x: auto; /* Ensures table is scrollable on small screens */
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 12px; /* Space below table to avoid overlap */
+}
+
+.admin-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Table Header Styles */
+.admin-table thead tr {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.admin-table th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-table th:last-child {
+  border-right: none;
+}
+
+/* Table Body Styles */
+.admin-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--border-color);
+  color: #495057;
+  font-size: 0.95rem;
+  vertical-align: top; /* Important for multi-line content */
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Hover effect on rows */
+.admin-table tbody tr:hover {
+  background-color: #e9ecef; /* Light highlight on hover */
+}
+
+/* Zebra striping for readability */
+.admin-table tbody tr:nth-child(even) {
+  background-color: #f8f9fa; /* Very light subtle stripe */
+}
+
+/* Empty State */
+.admin-table td.empty {
+  text-align: center;
+  font-style: italic;
+  color: var(--secondary-color);
+  padding: 20px;
+}
+
+/* ================== MEDIA QUERIES (Responsiveness) ================== */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 20px;
+  }
+
+  .admin-container h1 {
+    font-size: 2rem;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr; /* Stack cards on mobile */
+  }
+
+  .stat-card {
+    padding: 15px;
+  }
+}
+
+/* ================== Navbar PLACEHOLDER STYLE ================== */
+/* NOTE: You should style your actual Navbar component separately. 
+   This is just a basic placeholder to ensure the layout looks correct 
+   if you don't have existing Navbar styles. */
+.navbar-placeholder {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: #343a40; /* Dark background for Navbar */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  color: white;
+}
+
+/* You must ensure your actual Navbar component uses a fixed position 
+   and has a height of var(--header-height) for the padding to work correctly. */
+
+/* ========== DARK THEME OVERRIDES FOR ADMIN DASHBOARD ========== */
+.admin-root {
+  background-color: #0f172a; /* slate-900 */
+  color: #e5e7eb; /* text-gray-200 */
+  min-height: 100vh;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+}
+
+.admin-sidebar {
+  background-color: #0b1320; /* deep panel */
+  border-right: 1px solid #1f2937;
+  min-height: calc(100vh - var(--header-height));
+  position: sticky;
+  top: var(--header-height);
+  padding: 16px 12px;
+}
+
+.admin-content { overflow: auto; }
+
+.admin-root .admin-container {
+  max-width: none;
+  margin: 0;
+  width: 100%;
+  padding: 24px 28px;
+}
+
+.admin-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 0 0 8px 0;
+}
+
+.admin-subtitle { color: #94a3b8; margin-bottom: 18px; }
+
+/* ===== Stats Grid & Cards ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+@media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) { .stats-grid { grid-template-columns: 1fr; } }
+
+.stat-card {
+  background: #111827; /* panel */
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: none;
+}
+.stat-label { font-size: 0.9rem; color: #9ca3af; margin-bottom: 8px; }
+.stat-value { font-size: 2rem; font-weight: 700; color: #e5e7eb; }
+.stat-foot { font-size: 0.8rem; color: #6b7280; margin-top: 6px; }
+
+/* ===== Charts Grid & Cards ===== */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+@media (max-width: 1400px) { .charts-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+
+.chart-card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 16px;
+}
+.chart-title { color: #e5e7eb; font-size: 1rem; margin-bottom: 10px; }
+.big-number { font-size: 2.4rem; font-weight: 800; color: #e5e7eb; }
+
+/* ===== Table Sections ===== */
+.admin-section { background: #111827; border: 1px solid #1f2937; }
+.admin-table { border-color: #1f2937; }
+.admin-table thead tr {
+  background: #0b1320;
+  color: #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.admin-table th { border-right-color: #1f2937; }
+.admin-table td { color: #e5e7eb; border-bottom-color: #1f2937; }
+.admin-table tbody tr:hover { background-color: #0b1320; }
+.admin-table tbody tr:nth-child(even) { background-color: #0f172a; }
+
+/* ===== White background and content-only layout ===== */
+.admin-root { background-color: #ffffff; color: #1f2937; }
+.admin-content-only { display: block; }
+.admin-content { background: #ffffff; }
+.admin-root .admin-container { background: #ffffff; }
+
+/* Stats and cards contrast for white bg */
+.stat-card, .chart-card, .admin-section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+.admin-section.flat { border: none; background: transparent; }
+.chart-title, .stat-label, .stat-foot { color: #4b5563; }
+.stat-value, .big-number { color: #111827; }
+.admin-table thead tr { background: #111827; color: #ffffff; }
+.admin-table td { color: #1f2937; }
+.admin-table tbody tr:hover { background-color: #f3f4f6; }
+.admin-table tbody tr:nth-child(even) { background-color: #f9fafb; }
+
+/* ===== Branded Loader (logo + circular/elliptical ring) ===== */
+.brand-loader { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height: 50vh; }
+.brand-circle {
+  position: relative;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  display:flex; align-items:center; justify-content:center;
+}
+.loader-logo { width: 120px; height: 120px; object-fit: contain; z-index: 2; }
+.loader-ring {
+  position:absolute; inset: 18px; border-radius:50%;
+  border: 12px solid rgba(229,231,235,0.9);
+  border-top-color: #2CA24D; /* green */
+  border-right-color: #2CA24D; /* green */
+  animation: spin 1.2s linear infinite;
+}
+.loader-ring.ellipse {
+  inset: 24px; border-width: 10px; border-color: transparent; border-top-color:#2CA24D;
+  animation: orbit 1.4s linear infinite;
+}
+.loader-text { margin-top: 18px; font-weight: 600; letter-spacing: 2px; color:#2CA24D; }
+
+/* Responsive sizing */
+@media (max-width: 480px){
+  .brand-circle{ width: 180px; height: 180px; }
+  .loader-logo{ width: 96px; height: 96px; }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Optional elliptical motion variant */
+.loader-circle.ellipse { animation: orbit 1.2s linear infinite; border-color: transparent; border-top-color: #34D399; }
+@keyframes orbit {
+  0% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(6px) translateY(-2px) rotate(90deg); }
+  50% { transform: translateX(0) translateY(-4px) rotate(180deg); }
+  75% { transform: translateX(-6px) translateY(-2px) rotate(270deg); }
+  100% { transform: translateX(0) rotate(360deg); }
+}
+
+/* Flat variant to remove container background/border/shadow */
+.admin-section.flat {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border: none;
+  margin: 32px 0;
+}
+.admin-section.flat h2 { margin: 0 0 16px; color: #1f2937; }

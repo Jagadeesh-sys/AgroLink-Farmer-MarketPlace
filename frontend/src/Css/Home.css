@@ -1,0 +1,155 @@
+/* HERO SECTION */
+.hero {
+  width: calc(100% - 40px);
+  height: 520px;
+  margin: 20px 20px 0 20px; /* space from top, left, right */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+}
+
+/* TEXT ON IMAGE */
+.hero-content {
+  width: 45%;
+  margin-left: 60px;
+  color: white;
+}
+
+.hero-content h1 {
+  font-size: 44px;
+  line-height: 1.3;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 18px;
+  margin-bottom: 25px;
+  width: 90%;
+}
+
+.cta-btn {
+  background: #0a8f38;
+  color: white;
+  padding: 14px 32px;
+  border: none;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+
+  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+  background: #0d7d32;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 128, 0, 0.35);
+}
+
+/* HOW AGROLINK WORKS */
+.how-section h2 {
+  font-size: 30px;
+  font-weight: 700;
+  position: relative;
+  color: #145a32;
+  letter-spacing: 0.5px;
+
+  margin-bottom: 70px;   /* ⬅️ Added more space below text */
+}
+
+.how-section h2::after {
+  content: "";
+  width: 90px;
+  height: 4px;
+  background: #2ecc71;
+  position: absolute;
+  bottom: -55px;    /* ⬅️ Increased gap between text & underline */
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+}
+
+
+.how-section {
+  text-align: center;
+  margin: 60px auto;
+}
+
+.how-section h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.how-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+  padding: 35px 20px;
+
+  border-radius: 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transition: 0.4s ease;
+}
+
+/* Individual Box */
+.how-box {
+  text-align: center;
+  width: 22%;
+  cursor: pointer;
+  transition: 0.4s ease;
+}
+
+/* Circle Icon Styling */
+.icon-circle {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: 3px solid #d5d5d5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 32px;
+  color: #313131;
+  margin: auto;
+
+  transition: all 0.4s ease;
+}
+
+/* Text */
+.how-box p {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  transition: 0.4s ease;
+}
+
+/* HOVER EFFECTS */
+.how-box:hover {
+  transform: translateY(-8px);
+}
+
+.how-box:hover .icon-circle {
+  border-color: #2ecc71;             /* Green glow */
+  background: #e8ffe8;               /* Light green bg */
+  color: #1b8f45;                    /* Darker green icon */
+  box-shadow: 0 0 18px rgba(46, 204, 113, 0.5);
+  transform: scale(1.15);
+}
+
+.how-box:hover p {
+  color: #1b8f45;
+}

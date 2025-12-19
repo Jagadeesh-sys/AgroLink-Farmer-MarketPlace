@@ -1,0 +1,342 @@
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../Css/Cart.css";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+function Cart() {
+  const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(null);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountPct, setDiscountPct] = useState(0);
+
+  const navigate = useNavigate();
+
+  /* =========================
+     LOAD CART
+  ========================= */
+  useEffect(() => {
+    const refreshCart = () => {
+      const saved = JSON.parse(localStorage.getItem("cart")) || [];
+      setCart(saved);
+    };
+
+    refreshCart();
+    window.addEventListener("focus", refreshCart);
+    return () => window.removeEventListener("focus", refreshCart);
+  }, []);
+
+  /* =========================
+     LOAD USER
+  ========================= */
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("userData"));
+    if (savedUser) setUser(savedUser);
+  }, []);
+
+  /* =========================
+     CART HELPERS
+  ========================= */
+  const updateCart = (newCart) => {
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    window.dispatchEvent(new Event("cartUpdated"));
+  };
+
+  const clearCart = () => updateCart([]);
+
+  const removeItem = (id) =>
+    updateCart(cart.filter((item) => item.cropId !== id));
+
+  const updateQty = (cropId, value, max) => {
+    let qty = Number(value);
+    if (qty < 1) qty = 1;
+    if (qty > max) qty = max;
+
+    updateCart(
+      cart.map((item) =>
+        item.cropId === cropId ? { ...item, qty } : item
+      )
+    );
+  };
+
+  const fmt = (n) => new Intl.NumberFormat("en-IN").format(Math.round(n));
+
+  /* =========================
+     GST LOGIC
+  ========================= */
+  const getItemGST = (item) => {
+    if (item.farmerId) return 0; // Crops
+    if (item.cropId.startsWith("SEED")) return 0;
+    if (item.cropId.startsWith("FERT")) return 0.05;
+    if (item.cropId.startsWith("PEST")) return 0.18;
+    return 0;
+  };
+
+  const categoryTotal = { crops: 0, seeds: 0, fert: 0, pest: 0 };
+  const gstTotal = { crops: 0, seeds: 0, fert: 0, pest: 0 };
+
+  cart.forEach((item) => {
+    const amount = item.price * item.qty;
+    const gstRate = getItemGST(item);
+
+    if (item.farmerId) {
+      categoryTotal.crops += amount;
+      gstTotal.crops += amount * gstRate;
+    } else if (item.cropId.startsWith("SEED")) {
+      categoryTotal.seeds += amount;
+      gstTotal.seeds += amount * gstRate;
+    } else if (item.cropId.startsWith("FERT")) {
+      categoryTotal.fert += amount;
+      gstTotal.fert += amount * gstRate;
+    } else if (item.cropId.startsWith("PEST")) {
+      categoryTotal.pest += amount;
+      gstTotal.pest += amount * gstRate;
+    }
+  });
+
+  const subtotal =
+    categoryTotal.crops +
+    categoryTotal.seeds +
+    categoryTotal.fert +
+    categoryTotal.pest;
+
+  const discountAmount = Math.round(subtotal * discountPct);
+  const taxable = subtotal - discountAmount;
+
+  const finalGST =
+    gstTotal.crops + gstTotal.seeds + gstTotal.fert + gstTotal.pest;
+
+  const platformFee = 10;
+  const deliveryCharge = 40;
+
+  const grandTotal = taxable + finalGST + platformFee + deliveryCharge;
+
+  /* =========================
+     COUPON
+  ========================= */
+  const applyDiscount = () => {
+    const code = discountCode.trim().toUpperCase();
+    if (code === "SAVE10") setDiscountPct(0.1);
+    else {
+      setDiscountPct(0);
+      alert("Invalid coupon code");
+    }
+  };
+
+  /* =========================
+     IMAGE HANDLER
+  ========================= */
+  const getImage = (imgStr) => {
+    if (!imgStr) return "/Images/noimg.png";
+    if (imgStr.startsWith("http") || imgStr.startsWith("data:")) return imgStr;
+
+    const first = imgStr.split(",")[0].trim();
+    return `http://localhost:9090/backend/uploads/${first}`;
+  };
+
+  return (
+    <div className="dashboard-wrapper">
+      <Sidebar cartCount={cart.length} />
+
+      <div className="dashboard-content">
+        <Navbar />
+
+        <main className="dashboard-main">
+          <div className="cart-header">
+            <h2>Hello, {user?.fullName || "User"} 👋</h2>
+            <p>Your shopping cart summary</p>
+          </div>
+
+          <div className="cart-layout">
+            {/* ================= LEFT ================= */}
+            <div className="cart-items">
+              <h2 className="cart-title">Your Cart</h2>
+
+              {cart.length === 0 ? (
+                <p className="empty-cart">
+                  Your cart is empty.{" "}
+                  <Link to="/marketplace" className="empty-cart-cta">
+                    Explore Marketplace
+                  </Link>
+                </p>
+              ) : (
+                <div className="cart-list">
+                  {cart.map((item) => {
+                    const isCrop = !!item.farmerId;
+                    const available =
+                      Number(
+                        item.availableStock ??
+                          item.availableQty ??
+                          item.quantity
+                      ) || 1;
+
+                    return (
+                      <div className="cart-card-pro" key={item.cropId}>
+                        <img
+                          src={getImage(item.images)}
+                          alt={item.cropName}
+                          className="cart-img-pro"
+                        />
+
+                        <div className="cart-details-pro">
+                          <h3>{item.cropName}</h3>
+
+                          {isCrop && (
+                            <p>
+                              <b>Farmer ID:</b> {item.farmerId}
+                            </p>
+                          )}
+
+                          <p>
+                            <b>Price:</b> ₹{item.price}
+                            {isCrop && " / kg"}
+                          </p>
+
+                          <p>
+                            Available Stock: <b>{available}</b>
+                          </p>
+
+                          <div className="qty-wrapper">
+                            <label>
+                              <b>Buy Quantity {isCrop && "(Kg)"}</b>
+                            </label>
+
+                            <div className="qty-box">
+                              <button
+                                disabled={item.qty <= 1}
+                                onClick={() =>
+                                  updateQty(
+                                    item.cropId,
+                                    item.qty - 1,
+                                    available
+                                  )
+                                }
+                              >
+                                -
+                              </button>
+
+                              <input
+                                type="number"
+                                min="1"
+                                max={available}
+                                value={item.qty}
+                                onChange={(e) =>
+                                  updateQty(
+                                    item.cropId,
+                                    e.target.value,
+                                    available
+                                  )
+                                }
+                              />
+
+                              <button
+                                disabled={item.qty >= available}
+                                onClick={() =>
+                                  updateQty(
+                                    item.cropId,
+                                    item.qty + 1,
+                                    available
+                                  )
+                                }
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+
+                          <p className="item-total">
+                            Item Total:{" "}
+                            <b>₹{fmt(item.price * item.qty)}</b>
+                          </p>
+                        </div>
+
+                        <button
+                          className="remove-btn-pro"
+                          onClick={() => removeItem(item.cropId)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* ================= RIGHT ================= */}
+            <div className="cart-summary-card">
+              <h2>Order Summary</h2>
+
+              <div className="summary-row">
+                <span>Subtotal</span>
+                <b>₹{fmt(subtotal)}</b>
+              </div>
+
+              {discountAmount > 0 && (
+                <div className="summary-row">
+                  <span>Discount</span>
+                  <b style={{ color: "green" }}>
+                    -₹{fmt(discountAmount)}
+                  </b>
+                </div>
+              )}
+
+              <div className="summary-row">
+                <span>GST</span>
+                <b>₹{fmt(finalGST)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>Platform Fee</span>
+                <b>₹{fmt(platformFee)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>Delivery</span>
+                <b>₹{fmt(deliveryCharge)}</b>
+              </div>
+
+              <hr />
+
+              <div className="summary-row total">
+                <span>Grand Total</span>
+                <b>₹{fmt(grandTotal)}</b>
+              </div>
+
+              <button
+                className="checkout-btn-pro"
+                disabled={cart.length === 0}
+                onClick={() => navigate("/checkout")}
+              >
+                Proceed to Checkout
+              </button>
+
+              <div className="coupon-row">
+                <input
+                  placeholder="Coupon code (SAVE10)"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value)}
+                />
+                <button onClick={applyDiscount}>Apply</button>
+              </div>
+
+              <button
+                className="clear-cart-btn"
+                disabled={cart.length === 0}
+                onClick={clearCart}
+              >
+                Clear Cart
+              </button>
+            </div>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    </div>
+  );
+}
+
+export default Cart;

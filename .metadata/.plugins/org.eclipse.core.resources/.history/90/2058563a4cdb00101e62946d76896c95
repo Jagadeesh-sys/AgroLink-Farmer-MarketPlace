@@ -1,0 +1,48 @@
+package com.agrolink.servlets;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import java.io.*;
+
+@WebServlet("/uploads/*")
+public class UploadsServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+
+        // Extract requested file path: /rice1.jpg
+        String filePath = req.getPathInfo();
+        if (filePath == null || filePath.contains("..")) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        // ✅ SAME uploads directory as other servlets
+        String uploadDir = getServletContext().getRealPath("/uploads/");
+        File file = new File(uploadDir, filePath);
+
+        if (!file.exists() || file.isDirectory()) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        // Set content type
+        String mime = getServletContext().getMimeType(file.getName());
+        resp.setContentType(mime != null ? mime : "application/octet-stream");
+        resp.setContentLengthLong(file.length());
+
+        // Optional: caching (recommended)
+        resp.setHeader("Cache-Control", "public, max-age=86400");
+
+        try (InputStream in = new FileInputStream(file);
+             OutputStream out = resp.getOutputStream()) {
+
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+        }
+    }
+}

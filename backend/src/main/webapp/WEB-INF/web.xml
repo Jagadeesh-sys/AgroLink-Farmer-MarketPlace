@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <!-- ===================================================== -->
+    <!-- ⭐ SESSION CONFIG (IMPORTANT FIX) -->
+    <!-- Ensures JSESSIONID is sent to ALL /api/* endpoints -->
+    <!-- ===================================================== -->
+    <session-config>
+        <cookie-config>
+            <path>/</path>
+        </cookie-config>
+    </session-config>
+
+    <!-- ================== AUTH ================== -->
+
+    <!-- SIGNUP -->
+    <servlet>
+        <servlet-name>SignupServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.SignupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignupServlet</servlet-name>
+        <url-pattern>/api/auth/signup</url-pattern>
+    </servlet-mapping>
+
+    <!-- LOGIN -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/api/auth/login</url-pattern>
+    </servlet-mapping>
+
+    <!-- LOGOUT -->
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/api/auth/logout</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================== USER PROFILE ================== -->
+
+    <!-- GET PROFILE -->
+    <servlet>
+        <servlet-name>GetProfileServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.GetProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetProfileServlet</servlet-name>
+        <url-pattern>/api/user/get-profile</url-pattern>
+    </servlet-mapping>
+
+    <!-- UPDATE PROFILE -->
+    <servlet>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.UpdateProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <url-pattern>/api/user/update-profile</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================== CROPS ================== -->
+
+    <!-- SELLING CROP -->
+    <servlet>
+        <servlet-name>SellingCropServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.SellingCropServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SellingCropServlet</servlet-name>
+        <url-pattern>/api/crop/sellingcrop</url-pattern>
+    </servlet-mapping>
+
+    <!-- GET CROPS FOR DASHBOARD -->
+    <servlet>
+        <servlet-name>GetFarmerCropsServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.GetFarmerCropsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetFarmerCropsServlet</servlet-name>
+        <url-pattern>/api/crop/farmer</url-pattern>
+    </servlet-mapping>
+
+    <!-- DELETE CROP -->
+    <servlet>
+        <servlet-name>DeleteCropServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.DeleteCropServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteCropServlet</servlet-name>
+        <url-pattern>/api/crop/delete</url-pattern>
+    </servlet-mapping>
+
+    <!-- GET ALL CROPS -->
+    <servlet>
+        <servlet-name>GetAllCropsServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.GetAllCropsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetAllCropsServlet</servlet-name>
+        <url-pattern>/api/crop/all</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================== LOAN ================== -->
+
+    <!-- LOAN APPLY -->
+    <servlet>
+        <servlet-name>LoanApplyServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.LoanApplyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoanApplyServlet</servlet-name>
+        <url-pattern>/api/loan/apply</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================== INSURANCE ================== -->
+
+    <!-- INSURANCE APPLY -->
+    <servlet>
+        <servlet-name>InsuranceApplyServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.InsuranceApplyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InsuranceApplyServlet</servlet-name>
+        <url-pattern>/api/insurance/apply</url-pattern>
+    </servlet-mapping>
+
+    <!-- ================== ADMIN ================== -->
+
+    <!-- ADMIN DASHBOARD -->
+    <servlet>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <servlet-class>com.agrolink.servlets.AdminDashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <url-pattern>/api/admin/dashboard</url-pattern>
+    </servlet-mapping>
+
+</web-app>

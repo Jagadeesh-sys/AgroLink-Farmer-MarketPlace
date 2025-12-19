@@ -1,0 +1,100 @@
+.contact-page {
+  margin-top: 80px;
+  font-family: Poppins, sans-serif;
+}
+
+.contact-header {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.contact-header h1 {
+  color: #056052;
+  font-size: 36px;
+  font-weight: 600;
+}
+
+.contact-header p {
+  color: #555;
+  font-size: 16px;
+}
+
+.contact-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px 8%;
+  flex-wrap: wrap;
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 280px;
+}
+
+.contact-info h2 {
+  color: #056052;
+  margin-bottom: 10px;
+}
+
+.contact-info p {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #333;
+}
+
+.contact-info i {
+  color: #056052;
+  margin-right: 10px;
+}
+
+.contact-social a {
+  margin-right: 15px;
+  font-size: 20px;
+  color: #056052;
+}
+
+.contact-form {
+  flex: 1;
+  min-width: 300px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contact-form h2 {
+  color: #056052;
+  margin-bottom: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.contact-btn {
+  background: #056052;
+  color: white;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.contact-btn:hover {
+  background: #044d44;
+}
+
+.contact-map iframe {
+  width: 100%;
+  height: 350px;
+  border: none;
+  margin-top: 20px;
+}

@@ -1,0 +1,61 @@
+package com.agrolink.servlets;
+
+import com.agrolink.dao.CropDAO;
+import com.agrolink.model.Crop;
+
+import javax.servlet.http.*;
+import javax.servlet.annotation.MultipartConfig;
+import java.io.File;
+import java.io.IOException;
+
+@MultipartConfig
+public class UpdateCropServlet extends BaseServlet {
+
+    private static final String UPLOADS =
+            System.getProperty("catalina.base") + "/webapps/backend/uploads/";
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        setCors(req, resp);
+        resp.setContentType("application/json");
+
+        try {
+            String cropId = req.getParameter("cropId");
+
+            CropDAO dao = new CropDAO();
+            Crop crop = dao.getCropById(cropId);
+
+            crop.setCropName(req.getParameter("cropName"));
+            crop.setCategory(req.getParameter("category"));
+            crop.setQuantity(req.getParameter("quantity"));
+            crop.setPrice(req.getParameter("price"));
+            crop.setDescription(req.getParameter("description"));
+
+            // optional: update new images
+            StringBuilder newImages = new StringBuilder();
+
+            for (Part part : req.getParts()) {
+                if (!"images".equals(part.getName())) continue;
+
+                String original = part.getSubmittedFileName();
+                if (original == null || original.isEmpty()) continue;
+
+                String file = System.currentTimeMillis() + "_" + original;
+                part.write(UPLOADS + file);
+                newImages.append(file).append(",");
+            }
+
+            if (newImages.length() > 0) {
+                crop.setImages(newImages.toString());
+            }
+
+            dao.updateCrop(crop);
+
+            sendJson(resp, "{\"status\":\"SUCCESS\"}");
+
+        } catch (Exception e) {
+            sendJson(resp, "{\"status\":\"FAILED\"}");
+        }
+    }
+}

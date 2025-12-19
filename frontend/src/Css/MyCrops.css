@@ -1,0 +1,57 @@
+/* ===========================================
+   MY CROPS PAGE
+=========================================== */
+
+.page-crops {
+  padding: 30px;
+}
+
+.page-crops h2 {
+  font-size: 28px;
+  color: #0f3d3e;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #5e6d6e;
+  margin-bottom: 25px;
+}
+
+/* Crop Listing */
+.crops-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.crop-card {
+  padding: 20px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+.crop-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.crop-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.crop-card h3 {
+  color: #0f3d3e;
+  margin-bottom: 6px;
+}
+
+.crop-card p {
+  margin: 3px 0;
+  color: #4f5f60;
+}

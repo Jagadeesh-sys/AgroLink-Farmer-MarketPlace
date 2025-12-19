@@ -1,0 +1,18 @@
+package com.agrolink.util;
+
+import com.cloudinary.Cloudinary;
+
+public class CloudinaryConfig {
+    private static Cloudinary cloudinary;
+
+    public static Cloudinary getInstance() {
+        if (cloudinary == null) {
+            String url = System.getenv("CLOUDINARY_URL");
+            if (url == null || url.isEmpty()) {
+                throw new RuntimeException("CLOUDINARY_URL not set");
+            }
+            cloudinary = new Cloudinary(url);
+        }
+        return cloudinary;
+    }
+}

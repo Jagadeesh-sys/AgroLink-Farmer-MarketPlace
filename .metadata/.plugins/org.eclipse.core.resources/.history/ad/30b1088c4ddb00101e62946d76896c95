@@ -1,0 +1,154 @@
+import React, { useState, useEffect } from "react";
+import "../Css/Buy.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+function Buy() {
+  const [search, setSearch] = useState("");
+  const [crops, setCrops] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
+
+  // Load previous cart
+  useEffect(() => {
+    const saved = localStorage.getItem("cart");
+    if (saved) setCart(JSON.parse(saved));
+  }, []);
+
+  // Save cart on update
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  // Fetch all crops (includes quantity, soldQty, availableStock)
+  useEffect(() => {
+    fetch("/api/crop/all")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setCrops(data);
+        } else {
+          setCrops([]);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load crops:", err);
+        setCrops([]);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Build image URL
+  const getImage = (imgStr) => {
+    if (!imgStr) return "/Images/noimg.png";
+    const first = imgStr.split(",")[0].trim();
+    return `http://localhost:9090/backend/uploads/${first}`;
+  };
+
+  // Add to Cart
+  const addToCart = (crop) => {
+    const available =
+      Number(crop.availableStock ?? crop.quantity - crop.soldQty) || 0;
+
+    const exists = cart.find((c) => c.cropId === crop.cropId);
+
+    if (exists) {
+      if (exists.qty < available) {
+        setCart(
+          cart.map((c) =>
+            c.cropId === crop.cropId ? { ...c, qty: c.qty + 1 } : c
+          )
+        );
+      } else {
+        alert("Not enough stock available");
+      }
+    } else {
+      const newItem = {
+        cropId: crop.cropId,
+        farmerId: crop.farmerId,
+        cropName: crop.cropName,
+        price: Number(crop.price),
+        images: crop.images,
+        quantity: Number(crop.quantity),
+        soldQty: Number(crop.soldQty),
+        availableStock: available,
+        qty: 1,
+      };
+
+      setCart([...cart, newItem]);
+    }
+
+    alert(`${crop.cropName} added to cart!`);
+  };
+
+  // Filter crops
+  const filtered = crops.filter((c) =>
+    c.cropName.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <>
+      {/* ⭐ NAVBAR (top) */}
+      <Navbar />
+
+      {/* ⭐ MAIN CONTENT */}
+      <div className="buy-container" style={{ marginTop: "80px" }}>
+        <h2 className="buy-title">
+          <i className="fa fa-handshake"></i> Buy Fresh Produce
+        </h2>
+
+        {/* Search Bar */}
+        <div className="buy-search-box">
+          <i className="fa fa-search"></i>
+          <input
+            type="text"
+            placeholder="Search crops... (Tomato, Wheat, etc)"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {loading && <p className="loading">Loading crops...</p>}
+
+        {!loading && filtered.length === 0 && (
+          <p className="no-data">No crops found.</p>
+        )}
+
+        {/* Crop Cards */}
+        <div className="buy-grid">
+          {filtered.map((item) => (
+            <div className="buy-card" key={item.cropId}>
+              <img
+                src={getImage(item.images)}
+                alt={item.cropName}
+                className="buy-img"
+                onError={(e) => (e.target.src = "/Images/noimg.png")}
+              />
+
+              <h3 className="buy-name">{item.cropName}</h3>
+
+              <p className="buy-price">
+                <i className="fa fa-rupee-sign"></i> {item.price} / Kg
+              </p>
+
+              {/* Stock Display */}
+              <p className="buy-stock">
+                <b>Available:</b>{" "}
+                {Number(item.availableStock ?? item.quantity - item.soldQty)} Kg
+              </p>
+
+              <button className="buy-btn" onClick={() => addToCart(item)}>
+                <i className="fa fa-shopping-cart"></i> Add to Cart
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ⭐ FOOTER (bottom) */}
+      <Footer />
+    </>
+  );
+}
+
+export default Buy;

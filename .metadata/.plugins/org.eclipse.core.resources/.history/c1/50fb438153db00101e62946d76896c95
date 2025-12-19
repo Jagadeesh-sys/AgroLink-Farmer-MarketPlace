@@ -1,0 +1,28 @@
+package com.agrolink;
+
+import org.apache.catalina.startup.Tomcat;
+import java.io.File;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+
+        // ✅ Railway provides PORT automatically
+        int port = Integer.parseInt(
+                System.getenv().getOrDefault("PORT", "8080")
+        );
+
+        Tomcat tomcat = new Tomcat();
+        tomcat.setPort(port);
+
+        // Required to initialize connector
+        tomcat.getConnector();
+
+        // ✅ ROOT context (IMPORTANT)
+        String webappDir = new File("src/main/webapp").getAbsolutePath();
+        tomcat.addWebapp("", webappDir);
+
+        tomcat.start();
+        tomcat.getServer().await();
+    }
+}

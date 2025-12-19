@@ -1,0 +1,92 @@
+/* Container */
+.pesticide-container {
+  padding: 20px;
+  background: white;
+  min-height: 60vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Title */
+.pesticide-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #055052;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.pesticide-title i {
+  color: #2e7d32;
+}
+
+/* Grid */
+.pesticide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+  padding: 10px;
+}
+
+/* Product Card (same as seeds) */
+.pesticide-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #e4e4e4;   /* Same flat border as seeds */
+  transition: 0.3s;
+}
+
+.pesticide-card:hover {
+  transform: translateY(-4px);
+  border-color: #c7c7c7;  /* Same hover effect */
+}
+
+/* Images */
+.pesticide-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Product Name */
+.pesticide-name {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #044444;
+}
+
+/* Price */
+.pesticide-price {
+  margin: 8px 0 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* Button (same style as seeds-btn) */
+.pesticide-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.pesticide-btn i {
+  margin-right: 6px;
+}
+
+.pesticide-btn:hover {
+  background: #3e8c40;
+}

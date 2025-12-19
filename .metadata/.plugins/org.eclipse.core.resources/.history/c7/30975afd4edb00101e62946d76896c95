@@ -1,0 +1,281 @@
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../Css/Cart.css";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+function Cart() {
+  const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(null);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountPct, setDiscountPct] = useState(0);
+  const navigate = useNavigate();
+
+  /* =========================
+     LOAD CART
+  ========================= */
+  useEffect(() => {
+    const loadCart = () => {
+      const raw = localStorage.getItem("cart");
+      const parsed = raw ? JSON.parse(raw) : [];
+      setCart(Array.isArray(parsed) ? parsed : []);
+    };
+
+    loadCart();
+    window.addEventListener("focus", loadCart);
+    return () => window.removeEventListener("focus", loadCart);
+  }, []);
+
+  /* =========================
+     LOAD USER
+  ========================= */
+  useEffect(() => {
+    fetch("/api/user/get-profile", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.status !== "error") setUser(data);
+      })
+      .catch(() => setUser(null));
+  }, []);
+
+  /* =========================
+     IMAGE HANDLER – FINAL FIX ✅
+  ========================= */
+  const getImage = (imgStr) => {
+    // ❌ no image
+    if (!imgStr || imgStr.trim() === "") {
+      return process.env.PUBLIC_URL + "/Images/noimg.png";
+    }
+
+    // ✅ seed / fertilizer images (FULL URL)
+    if (imgStr.startsWith("http")) {
+      return imgStr;
+    }
+
+    // ✅ local uploaded images
+    const list = imgStr
+      .split(",")
+      .map((i) => i.trim())
+      .filter(Boolean);
+
+    if (!list.length) {
+      return process.env.PUBLIC_URL + "/Images/noimg.png";
+    }
+
+    // remove "uploads/" because servlet already maps it
+    const fileName = list[0].replace("uploads/", "");
+    return `http://localhost:9090/backend/uploads/${fileName}`;
+  };
+
+  /* =========================
+     CART HELPERS
+  ========================= */
+  const updateCart = (newCart) => {
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    window.dispatchEvent(new Event("cartUpdated"));
+  };
+
+  const removeItem = (id) =>
+    updateCart(cart.filter((c) => c.cropId !== id));
+
+  const updateKg = (id, qty, available) => {
+    let q = Number(qty);
+    if (q < 1) q = 1;
+    if (q > available) q = available;
+
+    updateCart(
+      cart.map((item) =>
+        item.cropId === id ? { ...item, qty: q } : item
+      )
+    );
+  };
+
+  const clearCart = () => updateCart([]);
+
+  const fmt = (n) => new Intl.NumberFormat("en-IN").format(n);
+
+  /* =========================
+     TOTALS
+  ========================= */
+  const subtotal = cart.reduce(
+    (sum, i) => sum + i.price * i.qty,
+    0
+  );
+
+  const discountAmount = Math.round(subtotal * discountPct);
+  const taxable = subtotal - discountAmount;
+  const gst = Math.round(taxable * 0.05);
+  const platformFee = 10;
+  const deliveryCharge = 40;
+  const grandTotal = taxable + gst + platformFee + deliveryCharge;
+
+  const applyDiscount = () => {
+    setDiscountPct(
+      discountCode.trim().toUpperCase() === "SAVE10" ? 0.1 : 0
+    );
+  };
+
+  return (
+    <div className="dashboard-wrapper">
+      <Sidebar cartCount={cart.length} />
+
+      <div className="dashboard-content">
+        <Navbar />
+
+        <main className="dashboard-main">
+          <div className="cart-header">
+            <h2>Hello, {user?.fullName || "Guest"} 👋</h2>
+            <p>Your shopping cart summary</p>
+          </div>
+
+          <div className="cart-layout">
+            {/* LEFT */}
+            <div className="cart-items">
+              {cart.length === 0 ? (
+                <p className="empty-cart">
+                  Your cart is empty.{" "}
+                  <Link to="/marketplace">Explore Marketplace</Link>
+                </p>
+              ) : (
+                cart.map((item) => (
+                  <div className="cart-card-pro" key={item.cropId}>
+                    <img
+                      src={getImage(item.images)}
+                      alt={item.cropName}
+                      className="cart-img-pro"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src =
+                          process.env.PUBLIC_URL + "/Images/noimg.png";
+                      }}
+                    />
+
+                    <div className="cart-details-pro">
+                      <h3>{item.cropName}</h3>
+                      <p>₹{item.price}</p>
+
+                      <div className="qty-box">
+                        <button
+                          onClick={() =>
+                            updateKg(
+                              item.cropId,
+                              item.qty - 1,
+                              item.availableStock || 99
+                            )
+                          }
+                        >
+                          -
+                        </button>
+
+                        <input
+                          value={item.qty}
+                          onChange={(e) =>
+                            updateKg(
+                              item.cropId,
+                              e.target.value,
+                              item.availableStock || 99
+                            )
+                          }
+                        />
+
+                        <button
+                          onClick={() =>
+                            updateKg(
+                              item.cropId,
+                              item.qty + 1,
+                              item.availableStock || 99
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <p>
+                        Item Total:{" "}
+                        <b>₹{fmt(item.price * item.qty)}</b>
+                      </p>
+                    </div>
+
+                    <button
+                      className="remove-btn-pro"
+                      onClick={() => removeItem(item.cropId)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* RIGHT */}
+            <div className="cart-summary-card">
+              <h2>Order Summary</h2>
+
+              <div className="summary-row">
+                <span>Subtotal</span>
+                <b>₹{fmt(subtotal)}</b>
+              </div>
+
+              {discountAmount > 0 && (
+                <div className="summary-row">
+                  <span>Discount</span>
+                  <b>-₹{fmt(discountAmount)}</b>
+                </div>
+              )}
+
+              <div className="summary-row">
+                <span>GST</span>
+                <b>₹{fmt(gst)}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>Platform Fee</span>
+                <b>₹{platformFee}</b>
+              </div>
+
+              <div className="summary-row">
+                <span>Delivery</span>
+                <b>₹{deliveryCharge}</b>
+              </div>
+
+              <hr />
+
+              <div className="summary-row total">
+                <span>Grand Total</span>
+                <b>₹{fmt(grandTotal)}</b>
+              </div>
+
+              <button
+                className="checkout-btn-pro"
+                disabled={cart.length === 0}
+                onClick={() => navigate("/checkout")}
+              >
+                Proceed to Checkout
+              </button>
+
+              <div className="coupon-row">
+                <input
+                  placeholder="Discount code (SAVE10)"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value)}
+                />
+                <button onClick={applyDiscount}>Apply</button>
+              </div>
+
+              <button className="clear-cart-btn" onClick={clearCart}>
+                Clear Cart
+              </button>
+            </div>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    </div>
+  );
+}
+
+export default Cart;

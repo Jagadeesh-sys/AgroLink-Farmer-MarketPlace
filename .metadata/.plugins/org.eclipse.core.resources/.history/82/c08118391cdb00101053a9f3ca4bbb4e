@@ -1,0 +1,5 @@
+package com.agrolink.dao;
+
+public class LoanDAO {
+
+}

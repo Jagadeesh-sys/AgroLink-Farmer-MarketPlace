@@ -1,0 +1,44 @@
+package com.agrolink.servlets;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import java.io.*;
+
+@WebServlet("/uploads/*")
+public class UploadsServlet extends HttpServlet {
+
+    private static final String UPLOAD_DIR =
+        "D:/AgroLink/backend/WebContent/uploads/";
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+
+        String filePath = req.getPathInfo(); // /rice1.jpg
+        if (filePath == null) {
+            resp.sendError(404);
+            return;
+        }
+
+        File file = new File(UPLOAD_DIR + filePath);
+        if (!file.exists()) {
+            resp.sendError(404);
+            return;
+        }
+
+        resp.setContentType(
+            getServletContext().getMimeType(file.getName())
+        );
+        resp.setContentLengthLong(file.length());
+
+        try (FileInputStream in = new FileInputStream(file);
+             OutputStream out = resp.getOutputStream()) {
+
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+        }
+    }
+}
