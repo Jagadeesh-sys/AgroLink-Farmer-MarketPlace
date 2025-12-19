@@ -3,6 +3,7 @@ package com.agrolink.servlets;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletException;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ public class BaseServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         setCors(req, resp);
         if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -50,6 +51,8 @@ public class BaseServlet extends HttpServlet {
         try {
             super.service(req, resp);
         } catch (RuntimeException e) {
+            throw e;
+        } catch (ServletException e) {
             throw e;
         } catch (Exception e) {
             throw new IOException(e);

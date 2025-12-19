@@ -128,7 +128,6 @@ function AdminDashboard() {
   // Role breakdown
   const farmerCount = data.users.filter(isFarmer).length;
   const adminCount = data.users.filter((u) => (u.systemRole || u.role || "").toString().toUpperCase().includes("ADMIN")).length;
-  const otherCount = Math.max(totalUsers - farmerCount - adminCount, 0);
   const farmerPct = totalUsers > 0 ? Math.round((farmerCount / totalUsers) * 100) : 0;
   const adminPct = totalUsers > 0 ? Math.round((adminCount / totalUsers) * 100) : 0;
 

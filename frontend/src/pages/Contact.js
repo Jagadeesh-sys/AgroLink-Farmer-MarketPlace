@@ -42,10 +42,10 @@ function Contact() {
 
             <h3>Follow Us</h3>
             <div className="contact-social">
-              <a href="#"><i className="fab fa-facebook"></i></a>
-              <a href="#"><i className="fab fa-instagram"></i></a>
-              <a href="#"><i className="fab fa-x-twitter"></i></a>
-              <a href="#"><i className="fab fa-youtube"></i></a>
+              <a href="https://www.facebook.com/" target="_blank" rel="noreferrer"><i className="fab fa-facebook"></i></a>
+              <a href="https://www.instagram.com/" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
+              <a href="https://x.com/" target="_blank" rel="noreferrer"><i className="fab fa-x-twitter"></i></a>
+              <a href="https://www.youtube.com/" target="_blank" rel="noreferrer"><i className="fab fa-youtube"></i></a>
             </div>
           </div>
 
