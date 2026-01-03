@@ -4,6 +4,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.Context;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.valves.RemoteIpValve;
+import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 
 import com.agrolink.servlets.*;
 
@@ -33,9 +34,13 @@ public class Main {
         }
 
         Context context = tomcat.addContext("", tempDir.getAbsolutePath());
+        boolean production = isProduction();
         context.getServletContext().getSessionCookieConfig().setHttpOnly(true);
-        if (isProduction()) {
+        if (production) {
             context.getServletContext().getSessionCookieConfig().setSecure(true);
+            Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
+            cookieProcessor.setSameSiteCookies("None");
+            context.setCookieProcessor(cookieProcessor);
         }
 
         RemoteIpValve remoteIpValve = new RemoteIpValve();
@@ -47,6 +52,7 @@ public class Main {
         String multipartTmp = new File(System.getProperty("java.io.tmpdir"), "multipart").getAbsolutePath();
         new File(multipartTmp).mkdirs();
 
+        addServlet(context, "HealthServlet", new HealthServlet(), "/api/health");
         addServlet(context, "SignupServlet", new SignupServlet(), "/api/auth/signup");
         addServlet(context, "LoginServlet", new LoginServlet(), "/api/auth/login");
         addServlet(context, "LogoutServlet", new LogoutServlet(), "/api/auth/logout");

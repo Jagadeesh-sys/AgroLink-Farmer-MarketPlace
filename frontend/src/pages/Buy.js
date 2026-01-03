@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../Css/Buy.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiFetch, buildUrl } from "../api/apiClient";
 
 function Buy() {
   const [search, setSearch] = useState("");
@@ -28,7 +29,7 @@ function Buy() {
      FETCH ALL CROPS
   ========================= */
   useEffect(() => {
-    fetch("/api/crop/all")
+    apiFetch("/api/crop/all")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -66,7 +67,7 @@ function Buy() {
     // Servlet maps: /uploads/*
     const fileName = list[0].replace("uploads/", "");
 
-    return `/uploads/${fileName}`;
+    return buildUrl(`/uploads/${fileName}`);
   };
 
   /* =========================

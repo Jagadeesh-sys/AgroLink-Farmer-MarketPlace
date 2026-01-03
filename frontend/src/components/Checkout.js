@@ -4,6 +4,7 @@ import "../Css/Checkout.css";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
+import { buildUrl } from "../api/apiClient";
 
 function Checkout() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ function Checkout() {
     }
 
     const fileName = list[0].replace("uploads/", "");
-    return `/uploads/${fileName}`;
+    return buildUrl(`/uploads/${fileName}`);
   };
 
   /* =========================

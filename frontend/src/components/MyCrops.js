@@ -3,6 +3,7 @@ import "../Css/MyCrops.css";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
+import { apiFetch, buildUrl } from "../api/apiClient";
 
 function MyCrops() {
   const [crops, setCrops] = useState([]);
@@ -11,7 +12,7 @@ function MyCrops() {
      LOAD USER + CROPS (SESSION)
   ========================= */
   useEffect(() => {
-    fetch("/api/user/get-profile", {
+    apiFetch("/api/user/get-profile", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -21,7 +22,7 @@ function MyCrops() {
           return;
         }
 
-        return fetch(
+        return apiFetch(
           `/api/crop/farmer?farmerId=${data.farmerId}`,
           { credentials: "include" }
         );
@@ -41,9 +42,9 @@ function MyCrops() {
 
     const first = images.split(",")[0].trim();
     if (first.startsWith("uploads/")) {
-      return `/${first}`;
+      return buildUrl(`/${first}`);
     }
-    return `/uploads/${first}`;
+    return buildUrl(`/uploads/${first}`);
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../Css/Navbar.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { apiFetch } from "../api/apiClient";
 
 function Navbar() {
   const [userName, setUserName] = useState(null);
@@ -18,7 +19,7 @@ function Navbar() {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const res = await fetch("/api/user/get-profile", {
+        const res = await apiFetch("/api/user/get-profile", {
           credentials: "include",
           cache: "no-store",
         });
@@ -71,7 +72,7 @@ function Navbar() {
   ============================== */
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", {
+      await apiFetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });

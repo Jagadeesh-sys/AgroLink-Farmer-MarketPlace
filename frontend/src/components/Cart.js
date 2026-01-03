@@ -4,6 +4,7 @@ import "../Css/Cart.css";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiFetch, buildUrl } from "../api/apiClient";
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -60,7 +61,7 @@ function Cart() {
      LOAD USER
   ========================= */
   useEffect(() => {
-    fetch("/api/user/get-profile", { credentials: "include" })
+    apiFetch("/api/user/get-profile", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data && data.status !== "error") {
@@ -125,7 +126,7 @@ function Cart() {
     // DB stores: uploads/filename.jpg
     const fileName = list[0].replace("uploads/", "");
 
-    return `/uploads/${fileName}`;
+    return buildUrl(`/uploads/${fileName}`);
   };
 
   /* =========================

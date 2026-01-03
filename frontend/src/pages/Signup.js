@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../Css/Auth.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiFetch } from "../api/apiClient";
 
 function Signup() {
   const [fullName, setFullName] = useState("");
@@ -33,8 +34,9 @@ function Signup() {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/auth/signup", {
+      const res = await apiFetch("/api/auth/signup", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
           fullName: fullName.trim(),

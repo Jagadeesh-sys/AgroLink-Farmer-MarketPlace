@@ -4,6 +4,7 @@ import "../Css/Dashboard.css";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiFetch, buildUrl } from "../api/apiClient";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -15,7 +16,7 @@ function Dashboard() {
      LOAD USER + CROPS
   ========================= */
   useEffect(() => {
-    fetch("/api/user/get-profile", { credentials: "include" })
+    apiFetch("/api/user/get-profile", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "error") {
@@ -25,7 +26,7 @@ function Dashboard() {
 
         setUser(data);
 
-        return fetch(
+        return apiFetch(
           `/api/crop/farmer?farmerId=${data.farmerId}`,
           { credentials: "include" }
         );
@@ -48,11 +49,10 @@ function Dashboard() {
 
     const firstImage = images.split(",")[0].trim();
 
-    // ✅ DB already contains "uploads/filename.jpg"
     if (firstImage.startsWith("uploads/")) {
-      return `/${firstImage}`;
+      return buildUrl(`/${firstImage}`);
     }
-    return `/uploads/${firstImage}`;
+    return buildUrl(`/uploads/${firstImage}`);
   };
 
   /* =========================
@@ -61,7 +61,7 @@ function Dashboard() {
   const deleteCrop = (cropId, images) => {
     if (!window.confirm("Delete this crop?")) return;
 
-    fetch("/api/crop/delete", {
+    apiFetch("/api/crop/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -93,7 +93,7 @@ function Dashboard() {
     fd.append("price", editingCrop.price);
     fd.append("description", editingCrop.description);
 
-    fetch("/api/crop/update", {
+    apiFetch("/api/crop/update", {
       method: "POST",
       body: fd,
       credentials: "include",

@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import "../Css/Home.css";
 import Navbar from "./Navbar";
 import Contact from "../pages/Contact";
+import { apiFetch } from "../api/apiClient";
 
 function Home() {
 
   // ⭐ Optional: verify session silently (does NOT block UI)
   useEffect(() => {
-    fetch("/api/user/get-profile", {
+    apiFetch("/api/user/get-profile", {
       credentials: "include"
     }).catch(() => {
       // ignore error → home is public page

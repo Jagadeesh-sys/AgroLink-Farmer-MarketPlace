@@ -1,10 +1,12 @@
+import { apiFetch } from "./apiClient";
+
 const BASE_URL = "/api/auth";
 
 /* =========================
    LOGIN (FINAL FIX)
 ========================= */
 export const loginUser = async (mobile, password) => {
-  const res = await fetch(`${BASE_URL}/login`, {
+  const res = await apiFetch(`${BASE_URL}/login`, {
     method: "POST",
     credentials: "include", // ⭐ REQUIRED FOR SESSION
     headers: {
@@ -34,7 +36,7 @@ export const loginUser = async (mobile, password) => {
    SIGNUP (FIXED)
 ========================= */
 export const signupUser = async (fullName, mobile, password) => {
-  const res = await fetch(`${BASE_URL}/signup`, {
+  const res = await apiFetch(`${BASE_URL}/signup`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -56,7 +58,7 @@ export const signupUser = async (fullName, mobile, password) => {
    LOGOUT (OK)
 ========================= */
 export const logoutUser = async () => {
-  const res = await fetch(`${BASE_URL}/logout`, {
+  const res = await apiFetch(`${BASE_URL}/logout`, {
     method: "POST",
     credentials: "include",
   });

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../Css/Sell.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiFetch } from "../api/apiClient";
 
 function Sell() {
   const [cropImages, setCropImages] = useState([]);
@@ -12,7 +13,7 @@ function Sell() {
      LOAD USER FROM SESSION
   ========================= */
   useEffect(() => {
-    fetch("/api/user/get-profile", {
+    apiFetch("/api/user/get-profile", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -98,7 +99,7 @@ function Sell() {
     });
 
     try {
-      const res = await fetch("/api/crop/sellingcrop", {
+      const res = await apiFetch("/api/crop/sellingcrop", {
         method: "POST",
         body: formData,
         credentials: "include", // ✅ REQUIRED

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import "../Css/AdminDashboard.css";
+import { apiFetch } from "../api/apiClient";
 
 function AdminDashboard() {
   const [data, setData] = useState({
@@ -18,7 +19,7 @@ function AdminDashboard() {
   useEffect(() => {
     const loadAdminData = async () => {
       try {
-        const res = await fetch("/api/admin/dashboard", {
+        const res = await apiFetch("/api/admin/dashboard", {
           credentials: "include",
           cache: "no-store",
         });

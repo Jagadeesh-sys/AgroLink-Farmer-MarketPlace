@@ -12,10 +12,10 @@ import java.util.Set;
 public class BaseServlet extends HttpServlet {
 
     protected void setCors(HttpServletRequest request, HttpServletResponse response) {
-        String origin = request.getHeader("Origin");
-        if (origin != null && !origin.trim().isEmpty()) {
+        String origin = normalizeOrigin(request.getHeader("Origin"));
+        if (origin != null && !origin.isEmpty()) {
             String allowed = System.getenv("CORS_ALLOWED_ORIGINS");
-            if (allowed != null && allowed.trim().equals("*")) {
+            if (isWildcardAllowed(allowed)) {
                 response.setHeader("Access-Control-Allow-Origin", origin);
                 response.setHeader("Vary", "Origin");
             } else {
@@ -97,11 +97,28 @@ public class BaseServlet extends HttpServlet {
 
         Set<String> allowed = new HashSet<>();
         for (String part : raw.split(",")) {
-            String trimmed = part.trim();
+            String trimmed = normalizeOrigin(part);
             if (!trimmed.isEmpty()) {
                 allowed.add(trimmed);
             }
         }
         return allowed;
+    }
+
+    private boolean isWildcardAllowed(String raw) {
+        if (raw == null) return false;
+        for (String part : raw.split(",")) {
+            if ("*".equals(part.trim())) return true;
+        }
+        return false;
+    }
+
+    private String normalizeOrigin(String value) {
+        if (value == null) return null;
+        String v = value.trim();
+        while (v.endsWith("/")) {
+            v = v.substring(0, v.length() - 1);
+        }
+        return v;
     }
 }

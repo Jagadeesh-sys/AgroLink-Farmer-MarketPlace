@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../Css/InsurancePage.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiFetch } from "../api/apiClient";
 
 function InsurancePage() {
   const [form, setForm] = useState({
@@ -119,7 +120,7 @@ function InsurancePage() {
     try {
       setSubmitting(true);
 
-      const res = await fetch("/api/insurance/apply", {
+      const res = await apiFetch("/api/insurance/apply", {
         method: "POST",
         body: fd,
         credentials: "include",   // ⭐ REQUIRED FOR SESSION COOKIE (JSESSIONID)

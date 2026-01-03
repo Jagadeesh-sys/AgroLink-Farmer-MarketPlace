@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import "../Css/MyOrders.css";
+import { buildUrl } from "../api/apiClient";
 
 function MyOrders() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function MyOrders() {
     // DB stores: uploads/filename.jpg
     const fileName = list[0].replace("uploads/", "");
 
-    return `/uploads/${fileName}`;
+    return buildUrl(`/uploads/${fileName}`);
   };
 
   /* =========================

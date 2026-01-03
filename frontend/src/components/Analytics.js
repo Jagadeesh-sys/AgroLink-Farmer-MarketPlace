@@ -3,6 +3,7 @@ import "../Css/Analytics.css";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
+import { apiFetch } from "../api/apiClient";
 
 function Analytics() {
   const [crops, setCrops] = useState([]);
@@ -11,7 +12,7 @@ function Analytics() {
      LOAD USER (SESSION) + CROPS
   ========================= */
   useEffect(() => {
-    fetch("/api/user/get-profile", {
+    apiFetch("/api/user/get-profile", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -21,7 +22,7 @@ function Analytics() {
           return;
         }
 
-        return fetch(
+        return apiFetch(
           `/api/crop/farmer?farmerId=${user.farmerId}`,
           { credentials: "include" }
         );

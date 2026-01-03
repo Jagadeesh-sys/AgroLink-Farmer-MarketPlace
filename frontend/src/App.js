@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { apiFetch } from "./api/apiClient";
 
 /* ===== COMMON ===== */
 import Home from "./components/Home";
@@ -46,7 +47,7 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("/api/user/get-profile", {
+        const res = await apiFetch("/api/user/get-profile", {
           credentials: "include",
           cache: "no-store",
         });

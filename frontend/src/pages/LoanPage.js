@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../Css/LoanPage.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { apiFetch } from "../api/apiClient";
 
 function LoanPage() {
 
@@ -128,7 +129,7 @@ function LoanPage() {
       data.append("addressProof", formData.addressProof);
       data.append("landProof", formData.landProof);
 
-      const response = await fetch("/api/loan/apply", {
+      const response = await apiFetch("/api/loan/apply", {
         method: "POST",
         body: data,
         credentials: "include",

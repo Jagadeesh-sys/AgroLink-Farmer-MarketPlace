@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../Css/Profile.css";
 import Navbar from "../components/Navbar";
+import { apiFetch, buildUrl } from "../api/apiClient";
 
 function Profile() {
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,7 @@ function Profile() {
   const loadProfile = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/user/get-profile", {
+      const res = await apiFetch("/api/user/get-profile", {
         credentials: "include",
       });
 
@@ -96,7 +97,7 @@ function Profile() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/user/update-profile", {
+      const res = await apiFetch("/api/user/update-profile", {
         method: "POST",
         body: fd,
         credentials: "include",
@@ -134,7 +135,7 @@ function Profile() {
   ========================= */
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", {
+      await apiFetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
@@ -145,7 +146,7 @@ function Profile() {
   const profileImg = photoFile
     ? URL.createObjectURL(photoFile)
     : user.profilePhoto
-    ? `/${user.profilePhoto}?t=${Date.now()}`
+    ? buildUrl(`/${user.profilePhoto}?t=${Date.now()}`)
     : "";
 
   return (

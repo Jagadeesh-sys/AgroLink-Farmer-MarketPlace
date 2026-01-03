@@ -4,6 +4,7 @@ import "../Css/Cart.css";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { buildUrl } from "../api/apiClient";
 
 function Cart() {
   const [cart, setCart] = useState([]);
@@ -134,9 +135,9 @@ function Cart() {
 
     const first = imgStr.split(",")[0].trim();
     if (first.startsWith("uploads/")) {
-      return `/${first}`;
+      return buildUrl(`/${first}`);
     }
-    return `/uploads/${first}`;
+    return buildUrl(`/uploads/${first}`);
   };
 
   return (

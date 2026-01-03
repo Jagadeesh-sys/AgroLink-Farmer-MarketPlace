@@ -1,7 +1,0 @@
-[build]
-buildCommand = "mvn -DskipTests package"
-
-[deploy]
-startCommand = "java -jar backend/target/backend.jar"
-healthcheckPath = "/"
-
