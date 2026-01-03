@@ -22,19 +22,27 @@ public class Main {
         System.out.println("🚀 Starting AgroLink Backend...");
         System.out.flush();
 
-        // ✅ Railway provides PORT automatically
+        // ✅ Safely parse PORT
         String portEnv = System.getenv("PORT");
-        System.out.println("DEBUG: PORT env var is: " + portEnv);
-        int port = Integer.parseInt(
-                portEnv != null ? portEnv : "8080");
+        System.out.println("DEBUG: PORT env var is: '" + portEnv + "'");
+        int port = 8080;
+        if (portEnv != null && !portEnv.trim().isEmpty()) {
+            try {
+                port = Integer.parseInt(portEnv.trim());
+            } catch (NumberFormatException e) {
+                System.err.println("❌ Invalid PORT env var, defaulting to 8080");
+            }
+        }
 
         try {
             Tomcat tomcat = new Tomcat();
             tomcat.setPort(port);
             tomcat.setBaseDir(new File(System.getProperty("java.io.tmpdir"), "tomcat").getAbsolutePath());
 
-            // ⭐ REQUIRED to initialize connector
-            tomcat.getConnector();
+            // ⭐ REQUIRED: Initialize connector and bind to 0.0.0.0
+            // This ensures it listens on all interfaces, not just localhost
+            tomcat.getConnector().setProperty("address", "0.0.0.0");
+            tomcat.getConnector().setPort(port);
 
             File tempDir = new File(System.getProperty("java.io.tmpdir"), "tomcat");
             if (!tempDir.exists()) {
