@@ -1,9 +1,7 @@
 [build]
-builder = "nixpacks"
-buildCommand = "mvn clean package -DskipTests"
+# Removing "nixpacks" to force Dockerfile usage
+# builder = "nixpacks"
 
 [deploy]
-# Directly calling java to avoid script permission issues
-startCommand = "java -Xmx300m -Djava.net.preferIPv4Stack=true -jar backend/target/backend.jar"
 healthcheckPath = "/"
 restartPolicyType = "on_failure"
