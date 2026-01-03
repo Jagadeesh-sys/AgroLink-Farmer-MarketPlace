@@ -3,6 +3,7 @@ builder = "nixpacks"
 buildCommand = "mvn clean package -DskipTests"
 
 [deploy]
-startCommand = "java -jar backend/target/backend.jar"
+# Debugging: List files to verify jar location, then run with IPv4 preference
+startCommand = "echo '--- DEBUG FILE LIST ---' && ls -R backend/target && echo '--- STARTING JAVA ---' && java -Djava.net.preferIPv4Stack=true -jar backend/target/backend.jar"
 healthcheckPath = "/api/health"
 restartPolicyType = "on_failure"
