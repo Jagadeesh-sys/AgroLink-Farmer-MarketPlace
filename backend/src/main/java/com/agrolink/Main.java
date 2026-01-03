@@ -9,8 +9,11 @@ import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import com.agrolink.servlets.*;
 
 import java.io.File;
+import java.io.IOException;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class Main {
 
@@ -100,7 +103,17 @@ public class Main {
 
             addServlet(context, "AdminDashboardServlet", new AdminDashboardServlet(), "/api/admin/dashboard");
             addServlet(context, "UploadsServlet", new UploadsServlet(), "/uploads/*");
-            addServlet(context, "SpaServlet", new SpaServlet(), "/");
+
+            // 🔍 DEBUG MODE: Replaced SpaServlet with simple Hello used to verify startup
+            // addServlet(context, "SpaServlet", new SpaServlet(), "/");
+            Tomcat.addServlet(context, "RootServlet", new HttpServlet() {
+                @Override
+                protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+                    resp.setStatus(200);
+                    resp.getWriter().write("✅ SERVER IS RUNNING!");
+                }
+            });
+            context.addServletMappingDecoded("/", "RootServlet");
 
             System.out.println("🚀 AgroLink Backend started on port " + port);
             System.out.flush();
