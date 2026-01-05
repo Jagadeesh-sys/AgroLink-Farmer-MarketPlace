@@ -4,6 +4,9 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.Context;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.valves.RemoteIpValve;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleEvent;
+import org.apache.catalina.LifecycleListener;
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 
 import com.agrolink.servlets.*;
@@ -72,15 +75,37 @@ public class Main {
             }
 
             Context context = tomcat.addContext("", tempDir.getAbsolutePath());
+            System.out.println("DEBUG: Context added.");
+
+            /*
+             * ⚠️ DISABLED FOR DEBUGGING: SessionCookieConfig caused startup crashes.
+             * Re-enable once stability is confirmed.
+             */
+            // ✅ Fix: Configure SessionCookieConfig via LifecycleListener to verify it
+            // happens before initialization
+            context.addLifecycleListener((LifecycleEvent event) -> {
+                if (Lifecycle.CONFIGURE_START_EVENT.equals(event.getType())) {
+                    try {
+                        Context ctx = (Context) event.getLifecycle();
+                        ctx.getServletContext().getSessionCookieConfig().setHttpOnly(true);
+                        if (isProduction()) {
+                            ctx.getServletContext().getSessionCookieConfig().setSecure(true);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             boolean production = isProduction();
-            context.getServletContext().getSessionCookieConfig().setHttpOnly(true);
             if (production) {
-                context.getServletContext().getSessionCookieConfig().setSecure(true);
                 Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
                 cookieProcessor.setSameSiteCookies("None");
                 context.setCookieProcessor(cookieProcessor);
             }
+            /* */
 
+            System.out.println("DEBUG: Registering Valver...");
             RemoteIpValve remoteIpValve = new RemoteIpValve();
             remoteIpValve.setRemoteIpHeader("x-forwarded-for");
             remoteIpValve.setProtocolHeader("x-forwarded-proto");
@@ -90,6 +115,7 @@ public class Main {
             String multipartTmp = new File(System.getProperty("java.io.tmpdir"), "multipart").getAbsolutePath();
             new File(multipartTmp).mkdirs();
 
+            System.out.println("DEBUG: Registering Servlets...");
             addServlet(context, "HealthServlet", new HealthServlet(), "/api/health");
             addServlet(context, "SignupServlet", new SignupServlet(), "/api/auth/signup");
             addServlet(context, "LoginServlet", new LoginServlet(), "/api/auth/login");
