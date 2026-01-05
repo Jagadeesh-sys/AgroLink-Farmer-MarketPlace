@@ -38,8 +38,9 @@ function Login() {
       }
 
     } catch (err) {
+
       console.error("Login error:", err);
-      alert("Server error");
+      alert(err.message || "Unknown error occurred");
       setLoading(false);
     }
   };

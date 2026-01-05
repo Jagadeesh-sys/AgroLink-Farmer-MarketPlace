@@ -26,17 +26,21 @@ public class LoginServlet extends BaseServlet {
             UserDAO dao = new UserDAO();
             User user = dao.getUserByMobileAndPassword(mobile, password);
 
-            /* ==============================
-               ❌ INVALID LOGIN
-            ============================== */
+            /*
+             * ==============================
+             * ❌ INVALID LOGIN
+             * ==============================
+             */
             if (user == null) {
                 out.print("{\"status\":\"error\",\"message\":\"Invalid credentials\"}");
                 return;
             }
 
-            /* ==============================
-               ✅ ENSURE FARMER ID
-            ============================== */
+            /*
+             * ==============================
+             * ✅ ENSURE FARMER ID
+             * ==============================
+             */
             if (user.getFarmerId() == null || user.getFarmerId().isEmpty()) {
                 user = dao.getProfileByMobile(mobile);
             }
@@ -46,30 +50,35 @@ public class LoginServlet extends BaseServlet {
                 return;
             }
 
-            /* ==============================
-               🔥 CLEAR OLD SESSION (VERY IMPORTANT)
-            ============================== */
+            /*
+             * ==============================
+             * 🔥 CLEAR OLD SESSION (VERY IMPORTANT)
+             * ==============================
+             */
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {
                 oldSession.invalidate();
             }
 
-            /* ==============================
-               ✅ CREATE NEW SESSION
-            ============================== */
+            /*
+             * ==============================
+             * ✅ CREATE NEW SESSION
+             * ==============================
+             */
             HttpSession session = request.getSession(true);
             session.setAttribute("farmerId", user.getFarmerId());
             session.setAttribute("fullName", user.getFullName());
             session.setAttribute("mobile", user.getMobile());
-            session.setAttribute("role", user.getRole());               // Farmer / Buyer
-            session.setAttribute("systemRole", user.getSystemRole());   // ADMIN / USER
+            session.setAttribute("role", user.getRole()); // Farmer / Buyer
+            session.setAttribute("systemRole", user.getSystemRole()); // ADMIN / USER
             session.setMaxInactiveInterval(30 * 60); // 30 minutes
 
             out.print("{\"status\":\"success\",\"message\":\"Login successful\"}");
 
         } catch (Exception e) {
             e.printStackTrace();
-            out.print("{\"status\":\"error\",\"message\":\"Server exception\"}");
+            String errorMsg = e.toString().replace("\"", "'").replace("\n", " ");
+            out.print("{\"status\":\"error\",\"message\":\"Login Error: " + errorMsg + "\"}");
         }
     }
 }
