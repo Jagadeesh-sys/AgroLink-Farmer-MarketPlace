@@ -107,7 +107,7 @@ public class DBConnection {
     }
 
     private static String resolvePassword() {
-        return env("JDBC_PASSWORD", "DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASSWORD");
+        return env("JDBC_PASSWORD", "DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASSWORD", "MYSQL_ROOT_PASSWORD");
     }
 
     private static String env(String... keys) {
