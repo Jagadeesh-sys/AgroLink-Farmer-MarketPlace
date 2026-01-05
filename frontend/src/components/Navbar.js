@@ -122,8 +122,8 @@ function Navbar() {
             <div className="profile-dropdown">
               {/* Profile Header */}
               <div className="profile-header">
-                <p className="user-email">{user.email || "No email"}</p>
                 <p className="user-name">{user.fullName}</p>
+                <p className="user-email">{user.email || "No email"}</p>
                 <span className="role-badge">{user.role || "USER"}</span>
               </div>
 
