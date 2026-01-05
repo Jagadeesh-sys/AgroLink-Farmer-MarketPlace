@@ -13,10 +13,9 @@ public class DBConnection {
 
     static {
         try {
-            // Not necessary with modern drivers but safe:
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("MySQL driver not found", e);
+            throw new RuntimeException("MySQL Driver not found", e);
         }
     }
 
@@ -25,12 +24,12 @@ public class DBConnection {
     }
 
     private static HikariDataSource getDataSource() {
-        HikariDataSource local = dataSource;
-        if (local != null) return local;
+        if (dataSource != null)
+            return dataSource;
 
         synchronized (DBConnection.class) {
-            local = dataSource;
-            if (local != null) return local;
+            if (dataSource != null)
+                return dataSource;
 
             String jdbcUrl = resolveJdbcUrl();
             String user = resolveUser();
@@ -41,129 +40,105 @@ public class DBConnection {
             cfg.setUsername(user);
             cfg.setPassword(pass);
 
-            cfg.setMaximumPoolSize(parseIntEnv("DB_POOL_MAX", 10));
-            cfg.setMinimumIdle(parseIntEnv("DB_POOL_MIN_IDLE", 2));
-            cfg.setConnectionTimeout(parseLongEnv("DB_POOL_CONN_TIMEOUT_MS", 10_000L));
-            cfg.setIdleTimeout(parseLongEnv("DB_POOL_IDLE_TIMEOUT_MS", 600_000L));
-            cfg.setMaxLifetime(parseLongEnv("DB_POOL_MAX_LIFETIME_MS", 1_800_000L));
+            // Pool settings (safe for Railway free tier)
+            cfg.setMaximumPoolSize(10);
+            cfg.setMinimumIdle(2);
+            cfg.setConnectionTimeout(10000);
+            cfg.setIdleTimeout(600000);
+            cfg.setMaxLifetime(1800000);
 
-            Properties dsProps = new Properties();
-            dsProps.setProperty("cachePrepStmts", "true");
-            dsProps.setProperty("prepStmtCacheSize", "250");
-            dsProps.setProperty("prepStmtCacheSqlLimit", "2048");
-            dsProps.setProperty("useServerPrepStmts", "true");
-            dsProps.setProperty("useUnicode", "true");
-            dsProps.setProperty("characterEncoding", "utf8");
-            dsProps.setProperty("serverTimezone", "UTC");
-            cfg.setDataSourceProperties(dsProps);
+            // MySQL performance props
+            Properties props = new Properties();
+            props.setProperty("cachePrepStmts", "true");
+            props.setProperty("prepStmtCacheSize", "250");
+            props.setProperty("prepStmtCacheSqlLimit", "2048");
+            props.setProperty("useServerPrepStmts", "true");
+            props.setProperty("useUnicode", "true");
+            props.setProperty("characterEncoding", "utf8");
+            props.setProperty("serverTimezone", "UTC");
+            cfg.setDataSourceProperties(props);
 
-            local = new HikariDataSource(cfg);
-            dataSource = local;
+            dataSource = new HikariDataSource(cfg);
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    HikariDataSource ds = dataSource;
-                    if (ds != null) ds.close();
-                } catch (Exception ignored) {
+                if (dataSource != null) {
+                    dataSource.close();
                 }
             }));
 
-            return local;
+            System.out.println("✅ Database connected successfully");
+            return dataSource;
         }
+    }
+
+    /*
+     * ==========================
+     * ENV RESOLUTION (RAILWAY)
+     * ==========================
+     */
+
+    private static String resolveJdbcUrl() {
+        // 1️⃣ Direct JDBC URL
+        String jdbc = env("JDBC_URL", "DB_URL");
+        if (jdbc != null)
+            return normalize(jdbc);
+
+        // 2️⃣ Railway MySQL vars
+        String host = env("MYSQL_HOST");
+        String port = env("MYSQL_PORT");
+        String db = env("MYSQL_DATABASE");
+
+        if (host != null && port != null && db != null) {
+            return normalize(
+                    "jdbc:mysql://" + host + ":" + port + "/" + db);
+        }
+
+        throw new RuntimeException(
+                "❌ Missing DB URL. Set JDBC_URL or attach Railway MySQL");
     }
 
     private static String resolveUser() {
-        String user = firstNonBlankEnv("JDBC_USER", "DB_USER", "MYSQLUSER");
-        if (user != null) return user;
+        String user = env("JDBC_USER", "DB_USER", "MYSQL_USER");
+        if (user != null)
+            return user;
 
-        throw new IllegalStateException("Missing DB user. Set one of: JDBC_USER, DB_USER, MYSQLUSER");
+        throw new RuntimeException(
+                "❌ Missing DB user. Set JDBC_USER or MYSQL_USER");
     }
 
     private static String resolvePassword() {
-        String pass = firstNonBlankEnv("JDBC_PASSWORD", "DB_PASSWORD", "MYSQLPASSWORD");
-        if (pass != null) return pass;
+        String pass = env("JDBC_PASSWORD", "DB_PASSWORD", "MYSQL_PASSWORD");
+        if (pass != null)
+            return pass;
 
-        throw new IllegalStateException("Missing DB password. Set one of: JDBC_PASSWORD, DB_PASSWORD, MYSQLPASSWORD");
+        throw new RuntimeException(
+                "❌ Missing DB password. Set JDBC_PASSWORD or MYSQL_PASSWORD");
     }
 
-    private static String resolveJdbcUrl() {
-        String jdbcUrl = firstNonBlankEnv("JDBC_URL", "DB_URL", "JDBC_DATABASE_URL");
-        if (jdbcUrl != null) {
-            return normalizeJdbcUrl(jdbcUrl);
-        }
-
-        String databaseUrl = firstNonBlankEnv("DATABASE_URL", "MYSQL_URL");
-        if (databaseUrl != null) {
-            String normalized = databaseUrl.trim();
-            if (normalized.startsWith("jdbc:")) {
-                return normalizeJdbcUrl(normalized);
-            }
-            if (normalized.startsWith("mysql://")) {
-                return normalizeJdbcUrl("jdbc:" + normalized);
-            }
-        }
-
-        String host = firstNonBlankEnv("MYSQLHOST", "MYSQL_HOST");
-        String port = firstNonBlankEnv("MYSQLPORT", "MYSQL_PORT");
-        String db = firstNonBlankEnv("MYSQLDATABASE", "MYSQL_DATABASE");
-        if (host != null && port != null && db != null) {
-            return normalizeJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + db);
-        }
-
-        throw new IllegalStateException("Missing DB URL. Set JDBC_URL/DB_URL or Railway MySQL env vars");
-    }
-
-    private static String normalizeJdbcUrl(String jdbcUrl) {
-        String trimmed = jdbcUrl.trim();
-        if (!trimmed.startsWith("jdbc:")) {
-            throw new IllegalArgumentException("DB URL must start with jdbc:");
-        }
-
-        String withParams = trimmed;
-        String required = "useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-        if (trimmed.contains("?")) {
-            if (!trimmed.toLowerCase().contains("servertimezone=")) {
-                withParams = trimmed + "&serverTimezone=UTC";
-            }
-            if (!trimmed.toLowerCase().contains("usessl=")) {
-                withParams = withParams + "&useSSL=false";
-            }
-            if (!trimmed.toLowerCase().contains("allowpublickeyretrieval=")) {
-                withParams = withParams + "&allowPublicKeyRetrieval=true";
-            }
-            return withParams;
-        }
-        return trimmed + "?" + required;
-    }
-
-    private static String firstNonBlankEnv(String... keys) {
-        for (String key : keys) {
-            String value = System.getenv(key);
-            if (value != null) {
-                String trimmed = value.trim();
-                if (!trimmed.isEmpty()) return trimmed;
-            }
+    private static String env(String... keys) {
+        for (String k : keys) {
+            String v = System.getenv(k);
+            if (v != null && !v.trim().isEmpty())
+                return v.trim();
         }
         return null;
     }
 
-    private static int parseIntEnv(String key, int defaultValue) {
-        String raw = System.getenv(key);
-        if (raw == null || raw.trim().isEmpty()) return defaultValue;
-        try {
-            return Integer.parseInt(raw.trim());
-        } catch (NumberFormatException e) {
-            return defaultValue;
+    private static String normalize(String url) {
+        if (!url.startsWith("jdbc:")) {
+            throw new IllegalArgumentException("Invalid JDBC URL");
         }
-    }
 
-    private static long parseLongEnv(String key, long defaultValue) {
-        String raw = System.getenv(key);
-        if (raw == null || raw.trim().isEmpty()) return defaultValue;
-        try {
-            return Long.parseLong(raw.trim());
-        } catch (NumberFormatException e) {
-            return defaultValue;
+        if (url.contains("?")) {
+            if (!url.toLowerCase().contains("usessl="))
+                url += "&useSSL=false";
+            if (!url.toLowerCase().contains("allowpublickeyretrieval="))
+                url += "&allowPublicKeyRetrieval=true";
+            if (!url.toLowerCase().contains("servertimezone="))
+                url += "&serverTimezone=UTC";
+            return url;
         }
+
+        return url + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     }
 }
