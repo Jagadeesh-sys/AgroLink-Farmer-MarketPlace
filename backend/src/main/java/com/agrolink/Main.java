@@ -54,11 +54,12 @@ public class Main {
             System.out.println("--------------------------");
 
             // ❤️ HEARTBEAT THREAD (To prove it's alive in logs)
+            final int activePort = port;
             new Thread(() -> {
                 while (true) {
                     try {
                         Thread.sleep(5000);
-                        System.out.println("❤️ AgroLink Backend Heartbeat - alive on port " + port);
+                        System.out.println("❤️ AgroLink Backend Heartbeat - alive on port " + activePort);
                     } catch (InterruptedException e) {
                     }
                 }
