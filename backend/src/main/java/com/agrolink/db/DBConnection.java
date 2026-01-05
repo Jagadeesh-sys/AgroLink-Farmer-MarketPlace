@@ -79,14 +79,19 @@ public class DBConnection {
 
     private static String resolveJdbcUrl() {
         // 1️⃣ Direct JDBC URL
-        String jdbc = env("JDBC_URL", "DB_URL");
-        if (jdbc != null)
+        String jdbc = env("JDBC_URL", "DB_URL", "DATABASE_URL");
+        if (jdbc != null) {
+            // Handle "mysql://" format given by Railway
+            if (jdbc.startsWith("mysql://")) {
+                return normalize("jdbc:" + jdbc);
+            }
             return normalize(jdbc);
+        }
 
-        // 2️⃣ Railway MySQL vars
-        String host = env("MYSQL_HOST");
-        String port = env("MYSQL_PORT");
-        String db = env("MYSQL_DATABASE");
+        // 2️⃣ Railway MySQL vars (Checking both formats: MYSQL_HOST & MYSQLHOST)
+        String host = env("MYSQL_HOST", "MYSQLHOST");
+        String port = env("MYSQL_PORT", "MYSQLPORT");
+        String db = env("MYSQL_DATABASE", "MYSQLDATABASE");
 
         if (host != null && port != null && db != null) {
             return normalize(
@@ -94,25 +99,25 @@ public class DBConnection {
         }
 
         throw new RuntimeException(
-                "❌ Missing DB URL. Set JDBC_URL or attach Railway MySQL");
+                "❌ Missing DB URL. Set JDBC_URL, DATABASE_URL or attach Railway MySQL");
     }
 
     private static String resolveUser() {
-        String user = env("JDBC_USER", "DB_USER", "MYSQL_USER");
+        String user = env("JDBC_USER", "DB_USER", "MYSQL_USER", "MYSQLUSER");
         if (user != null)
             return user;
 
         throw new RuntimeException(
-                "❌ Missing DB user. Set JDBC_USER or MYSQL_USER");
+                "❌ Missing DB user. Set JDBC_USER, MYSQL_USER or MYSQLUSER");
     }
 
     private static String resolvePassword() {
-        String pass = env("JDBC_PASSWORD", "DB_PASSWORD", "MYSQL_PASSWORD");
+        String pass = env("JDBC_PASSWORD", "DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASSWORD");
         if (pass != null)
             return pass;
 
         throw new RuntimeException(
-                "❌ Missing DB password. Set JDBC_PASSWORD or MYSQL_PASSWORD");
+                "❌ Missing DB password. Set JDBC_PASSWORD, MYSQL_PASSWORD or MYSQLPASSWORD");
     }
 
     private static String env(String... keys) {

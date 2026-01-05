@@ -15,11 +15,18 @@ import java.io.File;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
 
+import com.agrolink.db.DBInit;
+
 public class Main {
 
     public static void main(String[] args) throws Exception {
         System.out.println("DEBUG: Entering main method...");
         System.out.println("DEBUG: Java Version: " + System.getProperty("java.version"));
+
+        // 🔥 Initialize Database
+        System.out.println("🔄 Initializing Database...");
+        DBInit.init();
+
         System.out.println("🚀 Starting AgroLink Backend...");
         System.out.flush();
 
