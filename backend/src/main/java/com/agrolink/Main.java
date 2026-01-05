@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-
+        System.out.println("DEBUG: Entering main method...");
+        System.out.println("DEBUG: Java Version: " + System.getProperty("java.version"));
         System.out.println("🚀 Starting AgroLink Backend...");
         System.out.flush();
 
