@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "../Css/Home.css";
 import Navbar from "./Navbar";
-import Contact from "../pages/Contact"; // Keep Contact section at bottom
+import Contact from "../pages/Contact";
 import { apiFetch } from "../api/apiClient";
 import { Link } from "react-router-dom";
 import {
@@ -16,37 +16,11 @@ import {
 
 function Home() {
 
-  // Optional: verify session silently
   useEffect(() => {
     apiFetch("/api/user/get-profile", {
-      credentials: "include"
-    }).catch(() => {
-      // ignore error
-    });
+      credentials: "include",
+    }).catch(() => { });
   }, []);
-
-  const features = [
-    {
-      icon: Leaf,
-      title: "Fresh Produce",
-      description: "Direct from farms to your doorstep. No middlemen, maximum freshness.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Fair Prices",
-      description: "Farmers get better margins, buyers get competitive prices.",
-    },
-    {
-      icon: Shield,
-      title: "Quality Assured",
-      description: "Every product is verified for quality and authenticity.",
-    },
-    {
-      icon: Truck,
-      title: "Fast Delivery",
-      description: "Efficient logistics ensuring timely delivery across regions.",
-    },
-  ];
 
   const stats = [
     { value: "10,000+", label: "Active Farmers" },
@@ -55,22 +29,49 @@ function Home() {
     { value: "500+", label: "Districts Covered" },
   ];
 
+  const features = [
+    {
+      icon: Leaf,
+      title: "Fresh Produce",
+      description: "Direct from farms to your doorstep.",
+    },
+    {
+      icon: TrendingUp,
+      title: "Fair Prices",
+      description: "Better margins for farmers & buyers.",
+    },
+    {
+      icon: Shield,
+      title: "Quality Assured",
+      description: "Verified & quality-checked products.",
+    },
+    {
+      icon: Truck,
+      title: "Fast Delivery",
+      description: "Reliable logistics across regions.",
+    },
+  ];
+
   return (
     <>
       <Navbar />
 
       <div className="home-wrapper">
 
-        {/* HERO SECTION */}
+        {/* HERO */}
         <section className="hero-section">
           <div className="hero-bg">
-            <img src="/Images/hero-farm.jpg" alt="Agricultural fields" className="hero-img" />
+            <img
+              src="/Images/hero-farm.jpg"
+              alt="Farm"
+              className="hero-img"
+            />
             <div className="hero-overlay"></div>
           </div>
 
-          <div className="container hero-content-wrapper">
+          <div className="hero-content-wrapper container">
             <div className="hero-badge">
-              <Leaf size={16} className="text-secondary" />
+              <Leaf size={16} />
               <span>India's #1 Farmer Marketplace</span>
             </div>
 
@@ -79,91 +80,72 @@ function Home() {
             </h1>
 
             <p className="hero-subtitle">
-              Connect directly with farmers. Buy fresh produce at fair prices.
-              Support sustainable agriculture.
+              Connect directly with farmers and buy fresh produce at fair prices.
             </p>
 
             <div className="hero-buttons">
               <Link to="/marketplace">
                 <button className="btn btn-primary">
-                  <ShoppingCart size={20} />
-                  Shop Now
+                  <ShoppingCart size={18} /> Shop Now
                 </button>
               </Link>
               <Link to="/signup">
                 <button className="btn btn-outline">
-                  Become a Seller
-                  <ArrowRight size={20} />
+                  Become a Seller <ArrowRight size={18} />
                 </button>
               </Link>
             </div>
 
             <div className="hero-trust">
-              {["Verified Farmers", "Secure Payments", "Quality Checked"].map((badge) => (
-                <div key={badge} className="trust-item">
-                  <CheckCircle size={16} className="text-secondary" />
-                  <span>{badge}</span>
-                </div>
-              ))}
+              {["Verified Farmers", "Secure Payments", "Quality Checked"].map(
+                (item) => (
+                  <div key={item} className="trust-item">
+                    <CheckCircle size={16} />
+                    <span>{item}</span>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </section>
 
-        {/* STATS SECTION */}
+        {/* ===== STATS (IMAGE MATCH) ===== */}
         <section className="stats-section">
-          <div className="container stats-grid">
-            {stats.map((stat, index) => (
+          <div className="stats-grid">
+            {stats.map((stat) => (
               <div key={stat.label} className="stat-card">
-                <p className="stat-value">{stat.value}</p>
-                <p className="stat-label">{stat.label}</p>
+                <div className="stat-value">{stat.value}</div>
+                <div className="stat-label">{stat.label}</div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* FEATURES SECTION */}
+        {/* FEATURES */}
         <section className="features-section">
           <div className="container">
             <div className="section-header">
               <h2>
                 Why Choose <span className="text-gradient">AgroLink</span>?
               </h2>
-              <p>We're revolutionizing how India buys and sells agricultural produce.</p>
+              <p>We're revolutionizing Indian agriculture.</p>
             </div>
 
             <div className="features-grid">
-              {features.map((feature) => (
-                <div key={feature.title} className="feature-card">
+              {features.map((f) => (
+                <div key={f.title} className="feature-card">
                   <div className="feature-icon-wrapper">
-                    <feature.icon size={28} className="feature-icon" />
+                    <f.icon size={28} />
                   </div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
+                  <h3>{f.title}</h3>
+                  <p>{f.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA SECTION */}
-        <section className="cta-section">
-          <div className="container">
-            <h2>Ready to Get Started?</h2>
-            <p>Join thousands of farmers and buyers already using AgroLink.</p>
-            <div className="cta-buttons">
-              <Link to="/signup">
-                <button className="btn btn-primary">Create Free Account</button>
-              </Link>
-              <Link to="/marketplace">
-                <button className="btn btn-outline-light">Browse Marketplace</button>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* CONTACT SECTION */}
         <Contact />
-
       </div>
     </>
   );
