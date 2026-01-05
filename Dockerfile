@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy root pom and modules
 COPY pom.xml .
 COPY backend/pom.xml backend/
-COPY frontend/pom.xml frontend/
+
 COPY frontend/package.json frontend/
 COPY frontend/package-lock.json frontend/
 

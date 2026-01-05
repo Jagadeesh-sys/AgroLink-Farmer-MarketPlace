@@ -41,8 +41,28 @@ public class Main {
 
             // ⭐ REQUIRED: Initialize connector and bind to 0.0.0.0
             // This ensures it listens on all interfaces, not just localhost
-            tomcat.getConnector().setProperty("address", "0.0.0.0");
+            tomcat.getConnector().setAttribute("address", "0.0.0.0");
             tomcat.getConnector().setPort(port);
+
+            // 🔍 LOG DEBUG INFO
+            System.out.println("----- DEBUG ENV VARS -----");
+            System.getenv().forEach((k, v) -> {
+                if (k.contains("PORT") || k.contains("HOST") || k.contains("RAILWAY")) {
+                    System.out.println(k + "=" + v);
+                }
+            });
+            System.out.println("--------------------------");
+
+            // ❤️ HEARTBEAT THREAD (To prove it's alive in logs)
+            new Thread(() -> {
+                while (true) {
+                    try {
+                        Thread.sleep(5000);
+                        System.out.println("❤️ AgroLink Backend Heartbeat - alive on port " + port);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }).start();
 
             File tempDir = new File(System.getProperty("java.io.tmpdir"), "tomcat");
             if (!tempDir.exists()) {
