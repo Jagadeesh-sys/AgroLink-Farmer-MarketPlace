@@ -4,20 +4,22 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/apiClient";
 
 function Navbar() {
-  const [userName, setUserName] = useState(null);
-  const [systemRole, setSystemRole] = useState(null); // ADMIN / USER
+  /* ==============================
+     STATE
+  ============================== */
+  const [user, setUser] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
-  const [loading, setLoading] = useState(true); // ⭐ NEW
 
   const navigate = useNavigate();
   const location = useLocation();
   const dropdownRef = useRef(null);
 
   /* ==============================
-     LOAD USER FROM SESSION (SAFE)
+     LOAD USER FROM SESSION
   ============================== */
   useEffect(() => {
     const loadProfile = async () => {
+      // Don't set loading(true) here to prevent navbar flash on navigation
       try {
         const res = await apiFetch("/api/user/get-profile", {
           credentials: "include",
@@ -25,30 +27,25 @@ function Navbar() {
         });
 
         if (!res.ok) {
-          setUserName(null);
-          setSystemRole(null);
+          setUser(null);
           return;
         }
 
         const data = await res.json();
 
         if (data?.status === "error" || !data?.fullName) {
-          setUserName(null);
-          setSystemRole(null);
+          setUser(null);
         } else {
-          setUserName(data.fullName);
-          setSystemRole(data.systemRole || null);
+          setUser(data);
         }
       } catch (err) {
         console.error("Navbar profile error:", err);
-        setUserName(null);
-        setSystemRole(null);
+        setUser(null);
       } finally {
-        setLoading(false); // ⭐ IMPORTANT
+        // loading state removed
       }
     };
 
-    setLoading(true);
     loadProfile();
     setShowMenu(false);
   }, [location.pathname]);
@@ -68,7 +65,7 @@ function Navbar() {
   }, []);
 
   /* ==============================
-     LOGOUT (FINAL)
+     LOGOUT
   ============================== */
   const handleLogout = async () => {
     try {
@@ -76,21 +73,14 @@ function Navbar() {
         method: "POST",
         credentials: "include",
       });
-    } catch {}
+    } catch { }
 
-    // 🔥 CLEAR STATE
-    setUserName(null);
-    setSystemRole(null);
+    setUser(null);
     setShowMenu(false);
-
-    // 🔥 HARD RELOAD
     window.location.replace("/login");
   };
 
-  /* ==============================
-     PREVENT FLICKER
-  ============================== */
-  if (loading) return null;
+
 
   return (
     <nav className="nav">
@@ -115,31 +105,59 @@ function Navbar() {
       </ul>
 
       {/* USER / AUTH */}
-      {userName ? (
+      {user ? (
         <div className="profile-dropdown-container" ref={dropdownRef}>
           <div
             className="profile-mini"
             onClick={() => setShowMenu((prev) => !prev)}
           >
             <div className="profile-circle">
-              {userName.charAt(0).toUpperCase()}
+              <i className="fa-regular fa-user"></i>
             </div>
-            <span className="profile-text">{userName}</span>
+            <span className="profile-text">{user.fullName}</span>
+            <i className={`fa-solid fa-chevron-down profile-arrow ${showMenu ? 'open' : ''}`}></i>
           </div>
 
           {showMenu && (
             <div className="profile-dropdown">
-              <p onClick={() => navigate("/profile")}>My Profile</p>
-              <p onClick={() => navigate("/dashboard")}>Dashboard</p>
+              {/* Profile Header */}
+              <div className="profile-header">
+                <p className="user-name">{user.fullName}</p>
+                <p className="user-email">{user.email || "No email"}</p>
+                <span className="role-badge">{user.role || "USER"}</span>
+              </div>
 
-              {/* ⭐ ADMIN ONLY */}
-              {systemRole === "ADMIN" && (
-                <p onClick={() => navigate("/admin")}>Admin Dashboard</p>
+              <div className="dropdown-divider"></div>
+
+              {/* Menu Items */}
+              <div className="dropdown-item" onClick={() => navigate("/dashboard")}>
+                <i className="fa-solid fa-table-columns"></i>
+                <span>Dashboard</span>
+              </div>
+
+              <div className="dropdown-item" onClick={() => navigate("/profile")}>
+                <i className="fa-regular fa-user"></i>
+                <span>Profile</span>
+              </div>
+
+              <div className="dropdown-item" onClick={() => navigate("/orders")}>
+                <i className="fa-solid fa-box-open"></i>
+                <span>My Orders</span>
+              </div>
+
+              {user.systemRole === "ADMIN" && (
+                <div className="dropdown-item" onClick={() => navigate("/admin")}>
+                  <i className="fa-solid fa-lock"></i>
+                  <span>Admin Panel</span>
+                </div>
               )}
 
-              <p className="logout" onClick={handleLogout}>
-                Logout
-              </p>
+              <div className="dropdown-divider"></div>
+
+              <div className="dropdown-item logout" onClick={handleLogout}>
+                <i className="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+              </div>
             </div>
           )}
         </div>

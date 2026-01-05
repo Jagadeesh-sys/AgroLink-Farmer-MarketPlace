@@ -23,6 +23,17 @@ public class Main {
         System.out.println("DEBUG: Entering main method...");
         System.out.println("DEBUG: Java Version: " + System.getProperty("java.version"));
 
+        // 🔍 DEBUG ENV VARS (Moved to top to catch DB issues)
+        System.out.println("----- DEBUG ENV VARS -----");
+        System.getenv().forEach((k, v) -> {
+            String key = k.toUpperCase();
+            if (key.contains("PORT") || key.contains("HOST") || key.contains("RAILWAY") ||
+                    key.contains("MYSQL") || key.contains("DB") || key.contains("JDBC")) {
+                System.out.println(k + "=" + v);
+            }
+        });
+        System.out.println("--------------------------");
+
         // 🔥 Initialize Database
         System.out.println("🔄 Initializing Database...");
         DBInit.init();
@@ -51,15 +62,6 @@ public class Main {
             // This ensures it listens on all interfaces, not just localhost
             tomcat.getConnector().setAttribute("address", "0.0.0.0");
             tomcat.getConnector().setPort(port);
-
-            // 🔍 LOG DEBUG INFO
-            System.out.println("----- DEBUG ENV VARS -----");
-            System.getenv().forEach((k, v) -> {
-                if (k.contains("PORT") || k.contains("HOST") || k.contains("RAILWAY")) {
-                    System.out.println(k + "=" + v);
-                }
-            });
-            System.out.println("--------------------------");
 
             // ❤️ HEARTBEAT THREAD (To prove it's alive in logs)
             final int activePort = port;
