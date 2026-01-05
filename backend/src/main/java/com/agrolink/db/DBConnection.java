@@ -79,7 +79,7 @@ public class DBConnection {
 
     private static String resolveJdbcUrl() {
         // 1️⃣ Direct JDBC URL
-        String jdbc = env("JDBC_URL", "DB_URL", "DATABASE_URL");
+        String jdbc = env("JDBC_URL", "DB_URL", "DATABASE_URL", "MYSQL_URL");
         if (jdbc != null) {
             // Handle "mysql://" format given by Railway
             if (jdbc.startsWith("mysql://")) {
@@ -103,21 +103,11 @@ public class DBConnection {
     }
 
     private static String resolveUser() {
-        String user = env("JDBC_USER", "DB_USER", "MYSQL_USER", "MYSQLUSER");
-        if (user != null)
-            return user;
-
-        throw new RuntimeException(
-                "❌ Missing DB user. Set JDBC_USER, MYSQL_USER or MYSQLUSER");
+        return env("JDBC_USER", "DB_USER", "MYSQL_USER", "MYSQLUSER");
     }
 
     private static String resolvePassword() {
-        String pass = env("JDBC_PASSWORD", "DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASSWORD");
-        if (pass != null)
-            return pass;
-
-        throw new RuntimeException(
-                "❌ Missing DB password. Set JDBC_PASSWORD, MYSQL_PASSWORD or MYSQLPASSWORD");
+        return env("JDBC_PASSWORD", "DB_PASSWORD", "MYSQL_PASSWORD", "MYSQLPASSWORD");
     }
 
     private static String env(String... keys) {
