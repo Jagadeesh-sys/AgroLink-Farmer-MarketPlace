@@ -186,6 +186,9 @@
   padding: 16px;
   border-bottom: 1px solid #eee;
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .user-name {
